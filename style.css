@@ -1,0 +1,14 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #888;
+    color: #111;
+    font-family: sans-serif;
+    height: 99%;
+}
+
+#container {
+    text-align: center;
+    margin: 1%;
+    height: 98%;
+}
