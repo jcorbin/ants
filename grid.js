@@ -37,7 +37,9 @@ Ants.Grid = (function() {
             this.data.push(row);
         }
 
-        // TODO: out of bound ants
+        for (var i=0; i<this.ants.length; i++) {
+            ant.getInBounds();
+        }
 
         this.updateSize();
     };
