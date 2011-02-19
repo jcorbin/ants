@@ -20,7 +20,10 @@
                 );
                 grid.addAnt(ant);
 
-                setInterval(grid.step.bind(grid), 100);
+                var i = setInterval(grid.step.bind(grid), 100);
+                window.addEventListener('error', function() {
+                    clearInterval(i);
+                });
             })();
         </script>
     </body>
