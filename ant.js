@@ -6,6 +6,20 @@ Ants.Ant = (function() {
     var Left = 0;
     var DefaultTurns = "RL";
 
+    function closestPoint(ref, points) {
+        var cur = null, q = 0;
+        points.forEach(function(point) {
+            var pq =
+                Math.pow(ref[0] - point[0], 2) +
+                Math.pow(ref[1] - point[1], 2);
+            if (cur == null || pq < q) {
+                cur = point;
+                q = pq;
+            }
+        });
+        return cur;
+    }
+
     function parseTurnDirections(s) {
         var d = [];
         s = s.toLowerCase();
