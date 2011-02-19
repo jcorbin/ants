@@ -10,9 +10,18 @@ Ants.Grid = (function() {
         this.colors = colors || DefaultColors;
         this.canvas = canvas;
         this.ants = [];
-        this.setSize(rows || DefaultRows, cols || DefaultCols);
+        this.rows = rows || DefaultRows;
+        this.cols = cols || DefaultCols;
+        this.data = [];
+        for (var i=0; i<this.rows; i++) {
+            var row = [];
+            for (var j=0; j<this.cols; j++)
+                row.push(0);
+            this.data.push(row);
+        }
 
         window.addEventListener('resize', this.updateSize.bind(this));
+        this.updateSize();
     }
 
     Grid.prototype.setSize = function(rows, cols) {
