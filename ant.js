@@ -22,8 +22,8 @@ Ants.Ant = (function() {
     }
 
     function Ant(row, col, heading, color, turns) {
-        this.row = row || -1;
-        this.col = col || -1;
+        this.row = row || null;
+        this.col = col || null;
         this.heading = heading || 0;
         this.color = color || '#f00';
         this.turns = parseTurnDirections(turns || DefaultTurns);
@@ -56,10 +56,12 @@ Ants.Ant = (function() {
     };
 
     Ant.prototype.getInBounds = function() {
-        // initital placement when added to grid
-        var t = (this.grid.ants.length+1);
-        ant.row = Math.floor((t * Math.sin(t) + 50)/100 * this.grid.rows);
-        ant.col = Math.floor((t * Math.cos(t) + 50)/100 * this.grid.cols);
+        if (this.row == null || this.col == null) {
+            // initital placement when added to grid
+            var t = (this.grid.ants.length+1);
+            ant.row = Math.floor((t * Math.sin(t) + 50)/100 * this.grid.rows);
+            ant.col = Math.floor((t * Math.cos(t) + 50)/100 * this.grid.cols);
+        }
     };
 
     return Ant;
