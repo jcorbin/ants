@@ -13,7 +13,7 @@
         <script language="JavaScript">
             (function () {
                 var grid = document.getElementById('grid');
-                grid = new Ants.Grid(grid);
+                grid = new Ants.Grid(grid, 10, 10);
 
                 var ant = new Ants.Ant(
                     Math.floor(grid.rows/2), Math.floor(grid.cols/2)
