@@ -36,19 +36,54 @@ Ants.Grid = (function() {
     };
 
     Grid.prototype.setSize = function(rows, cols) {
-        this.rows = rows;
+        // TODO: support controlling the center point
+        var dc = (cols - this.cols)/2,
+            dc_head = Math.floor(dc),
+            dc_tail = Math.ceil(dc);
+        if (dc > 0)
+            for (var i=0; i<this.rows; i++) {
+                var row = this.data[i];
+                for (var j=0; j<dc_head; j++)
+                    row.unshift(0);
+                for (var j=0; j<dc_tail; j++)
+                    row.push(0);
+            }
+        else if (dc < 0)
+            for (var i=0; i<this.rows; i++) {
+                var row = this.data[i];
+                for (var j=0; j<dc_head; j++)
+                    row.shift();
+                for (var j=0; j<dc_tail; j++)
+                    row.pop();
+            }
         this.cols = cols;
 
-        // TODO: non-destructive size-change
-        this.data = [];
-        for (var i=0; i<this.rows; i++) {
-            var row = [];
-            for (var j=0; j<this.cols; j++)
-                row.push(0);
-            this.data.push(row);
+        var dr = (rows - this.rows)/2,
+            dr_head = Math.floor(dr),
+            dr_tail = Math.ceil(dr);
+        if (dr > 0) {
+            function newRow() {
+                var row = [];
+                for (j=0; j<cols; j++)
+                    row.push(0);
+                return row;
+            }
+            for (var i=0; i<dr_head; i++)
+                this.data.unshift(newRow());
+            for (var i=0; i<dr_tail; i++)
+                this.data.push(newRow());
+        } else if (dr < 0) {
+            for (var i=0; i<dr_head; i++)
+                this.data.shift();
+            for (var i=0; i<dr_tail; i++)
+                this.data.pop();
         }
+        this.rows = rows;
 
         for (var i=0; i<this.ants.length; i++) {
+            var ant = this.ants[i];
+            ant.row += dr_head;
+            ant.col += dc_head;
             ant.getInBounds();
         }
 
