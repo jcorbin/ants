@@ -36,49 +36,57 @@ Ants.Grid = (function() {
     };
 
     Grid.prototype.resize = function(rows, cols) {
-        // TODO: support controlling the center point
         var dc = (cols - this.cols)/2,
-            dc_head = Math.floor(dc),
-            dc_tail = Math.ceil(dc);
-        if (dc > 0)
-            for (var i=0; i<this.rows; i++) {
-                var row = this.data[i];
-                for (var j=0; j<dc_head; j++)
-                    row.unshift(0);
-                for (var j=0; j<dc_tail; j++)
-                    row.push(0);
-            }
-        else if (dc < 0)
-            for (var i=0; i<this.rows; i++) {
-                var row = this.data[i];
-                for (var j=0; j<dc_head; j++)
-                    row.shift();
-                for (var j=0; j<dc_tail; j++)
-                    row.pop();
-            }
-        this.cols = cols;
+            dr = (rows - this.rows)/2;
+        this.resizeBy(
+            Math.floor(dc), Math.ceil(dc),
+            Math.floor(dr), Math.ceil(dr)
+        );
+    };
 
-        var dr = (rows - this.rows)/2,
-            dr_head = Math.floor(dr),
-            dr_tail = Math.ceil(dr);
-        if (dr > 0) {
-            function newRow() {
-                var row = [];
-                for (j=0; j<cols; j++)
-                    row.push(0);
-                return row;
-            }
+    Grid.prototype.resizeBy = function(dc_head, dc_tail, dr_head, dr_tail) {
+        if (dc_head > 0)
+            for (var i=0; i<this.rows; i++)
+                for (var j=0; j<dc_head; j++)
+                    this.data[i].unshift(0);
+        else if (dc_head < 0)
+            for (var i=0; i<this.rows; i++)
+                for (var j=0; j<dc_head; j++)
+                    this.data[i].shift();
+        this.cols += dc_head;
+
+        if (dc_tail > 0)
+            for (var i=0; i<this.rows; i++)
+                for (var j=0; j<dc_tail; j++)
+                    this.data[i].push(0);
+        else if (dc_tail < 0)
+            for (var i=0; i<this.rows; i++)
+                for (var j=0; j<dc_tail; j++)
+                    this.data[i].pop();
+        this.cols += dc_tail;
+
+        var newRow = function() {
+            var row = [];
+            for (j=0; j<this.cols; j++)
+                row.push(0);
+            return row;
+        }.bind(this);
+
+        if (dr_head > 0)
             for (var i=0; i<dr_head; i++)
                 this.data.unshift(newRow());
-            for (var i=0; i<dr_tail; i++)
-                this.data.push(newRow());
-        } else if (dr < 0) {
+        else if (dr_head < 0)
             for (var i=0; i<dr_head; i++)
                 this.data.shift();
+        this.rows += dr_head;
+
+        if (dr_tail > 0)
+            for (var i=0; i<dr_tail; i++)
+                this.data.push(newRow());
+        else if (dr_tail < 0)
             for (var i=0; i<dr_tail; i++)
                 this.data.pop();
-        }
-        this.rows = rows;
+        this.rows += dr_tail;
 
         for (var i=0; i<this.ants.length; i++) {
             var ant = this.ants[i];
