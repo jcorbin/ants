@@ -7,18 +7,11 @@
         <script src="ant.js" language="JavaScript"></script>
     </head>
     <body>
-        <form id="settings">
-            <label for="rows">Rows:</label> <input id="rows" type="text" size="4" value="50" />
-            <label for="cols">Cols:</label> <input id="cols" type="text" size="4" value="50" />
-        </form>
         <div id="container">
             <canvas id="grid"></canvas>
         </div>
         <script language="JavaScript">
             (function () {
-                var rows = document.getElementById('rows');
-                var cols = document.getElementById('cols');
-
                 var grid = document.getElementById('grid');
                 grid = new Ants.Grid(grid);
 
@@ -26,21 +19,6 @@
                     Math.floor(grid.rows/2), Math.floor(grid.cols/2)
                 );
                 grid.addAnt(ant);
-
-                function onDimChange(e) {
-                    var dim = e.target.id;
-                    var v = e.target.value;
-                    v = parseInt(v);
-                    if (isNaN(v))
-                        e.target.value = grid[dim].toString();
-                    else if (dim == "rows")
-                        grid.setSize(v, grid.cols);
-                    else if (dim == "cols")
-                        grid.setSize(grid.rows, v);
-                };
-
-                rows.addEventListener('change', onDimChange);
-                cols.addEventListener('change', onDimChange);
 
                 setInterval(function() {grid.step();}, 100);
             })();
