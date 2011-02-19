@@ -9,6 +9,7 @@
     <body>
         <div id="container">
             <canvas id="grid"></canvas>
+            <button id="run_ctl" style="float: left">Play</button>
         </div>
         <script language="JavaScript">
             (function () {
@@ -20,9 +21,32 @@
                 );
                 grid.addAnt(ant);
 
-                var i = setInterval(grid.step.bind(grid), 100);
+                var i = null;
+
+                function play() {
+                    i = setInterval(grid.step.bind(grid), 100);
+                }
+
+                function pause() {
+                    if (i != null) {
+                        clearInterval(i);
+                        i = null;
+                    }
+                }
+
                 window.addEventListener('error', function() {
-                    clearInterval(i);
+                    pause();
+                });
+
+                var runctl = document.getElementById('run_ctl');
+                runctl.addEventListener('click', function() {
+                    if (i == null) {
+                        play();
+                        runctl.innerText = 'Pause';
+                    } else {
+                        pause();
+                        runctl.innerText = 'Play';
+                    }
                 });
             })();
         </script>
