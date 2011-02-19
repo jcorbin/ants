@@ -24,6 +24,17 @@ Ants.Grid = (function() {
         this.updateSize();
     }
 
+    Grid.prototype.corners = function() {
+        var right = this.cols-1;
+        var bottom = this.rows-1;
+        return [
+            [0, 0],
+            [0, bottom],
+            [right, bottom],
+            [right, 0]
+        ];
+    };
+
     Grid.prototype.setSize = function(rows, cols) {
         this.rows = rows;
         this.cols = cols;
