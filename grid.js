@@ -89,12 +89,7 @@ Ants.Grid = (function() {
     Grid.prototype.addAnt = function(ant) {
         this.ants.push(ant);
         ant.grid = this;
-        if (! this.isInBounds(ant.row, ant.col)) {
-            // Place ants on a spiral initially
-            var t = (this.ants.length+1);
-            ant.row = Math.floor((t * Math.sin(t) + 50)/100 * this.rows);
-            ant.col = Math.floor((t * Math.cos(t) + 50)/100 * this.cols);
-        }
+        ant.getInBounds();
         ant.draw();
     };
 

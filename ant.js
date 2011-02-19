@@ -55,5 +55,12 @@ Ants.Ant = (function() {
         this.row += Math.round(Math.sin(this.heading));
     };
 
+    Ant.prototype.getInBounds = function() {
+        // initital placement when added to grid
+        var t = (this.grid.ants.length+1);
+        ant.row = Math.floor((t * Math.sin(t) + 50)/100 * this.grid.rows);
+        ant.col = Math.floor((t * Math.cos(t) + 50)/100 * this.grid.cols);
+    };
+
     return Ant;
 })();
