@@ -20,7 +20,7 @@
                 );
                 grid.addAnt(ant);
 
-                setInterval(function() {grid.step();}, 100);
+                setInterval(grid.step.bind(grid), 100);
             })();
         </script>
     </body>

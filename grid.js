@@ -12,8 +12,7 @@ Ants.Grid = (function() {
         this.ants = [];
         this.setSize(rows || DefaultRows, cols || DefaultCols);
 
-        var me = this;
-        window.addEventListener('resize', function() {me.updateSize()});
+        window.addEventListener('resize', this.updateSize.bind(this));
     }
 
     Grid.prototype.setSize = function(rows, cols) {
