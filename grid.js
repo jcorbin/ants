@@ -44,26 +44,26 @@ Ants.Grid = (function() {
         );
     };
 
-    Grid.prototype.resizeBy = function(dc_head, dc_tail, dr_head, dr_tail) {
-        if (dc_head > 0)
+    Grid.prototype.resizeBy = function(leftof, rightof, above, below) {
+        if (leftof > 0)
             for (var i=0; i<this.rows; i++)
-                for (var j=0; j<dc_head; j++)
+                for (var j=0; j<leftof; j++)
                     this.data[i].unshift(0);
-        else if (dc_head < 0)
+        else if (leftof < 0)
             for (var i=0; i<this.rows; i++)
-                for (var j=0; j<dc_head; j++)
+                for (var j=0; j<leftof; j++)
                     this.data[i].shift();
-        this.cols += dc_head;
+        this.cols += leftof;
 
-        if (dc_tail > 0)
+        if (rightof > 0)
             for (var i=0; i<this.rows; i++)
-                for (var j=0; j<dc_tail; j++)
+                for (var j=0; j<rightof; j++)
                     this.data[i].push(0);
-        else if (dc_tail < 0)
+        else if (rightof < 0)
             for (var i=0; i<this.rows; i++)
-                for (var j=0; j<dc_tail; j++)
+                for (var j=0; j<rightof; j++)
                     this.data[i].pop();
-        this.cols += dc_tail;
+        this.cols += rightof;
 
         var newRow = function() {
             var row = [];
@@ -72,26 +72,26 @@ Ants.Grid = (function() {
             return row;
         }.bind(this);
 
-        if (dr_head > 0)
-            for (var i=0; i<dr_head; i++)
+        if (above > 0)
+            for (var i=0; i<above; i++)
                 this.data.unshift(newRow());
-        else if (dr_head < 0)
-            for (var i=0; i<dr_head; i++)
+        else if (above < 0)
+            for (var i=0; i<above; i++)
                 this.data.shift();
-        this.rows += dr_head;
+        this.rows += above;
 
-        if (dr_tail > 0)
-            for (var i=0; i<dr_tail; i++)
+        if (below > 0)
+            for (var i=0; i<below; i++)
                 this.data.push(newRow());
-        else if (dr_tail < 0)
-            for (var i=0; i<dr_tail; i++)
+        else if (below < 0)
+            for (var i=0; i<below; i++)
                 this.data.pop();
-        this.rows += dr_tail;
+        this.rows += below;
 
         for (var i=0; i<this.ants.length; i++) {
             var ant = this.ants[i];
-            ant.row += dr_head;
-            ant.col += dc_head;
+            ant.row += above;
+            ant.col += leftof;
             ant.getInBounds();
         }
 
