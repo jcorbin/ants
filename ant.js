@@ -53,6 +53,25 @@ Ants.Ant = (function() {
         this.grid.data[this.row][this.col] = (c + 1) % this.grid.colors.length;
         this.col += Math.round(Math.cos(this.heading));
         this.row += Math.round(Math.sin(this.heading));
+
+        if (! this.grid.isInBounds(this.row, this.col)) {
+            // TODO smallest non-zero diff
+            var dr, dc;
+            if (this.row < 0)
+                dr = 0 - this.row;
+            else if (this.row >= this.grid.rows)
+                dr = this.grid.rows - this.row + 1;
+            else
+                dr = 0;
+            if (this.col < 0)
+                dc = 0 - this.col;
+            else if (this.col >= this.grid.cols)
+                dc = this.grid.cols - this.col + 1;
+            else
+                dc = 0;
+            var delta = Math.max(dc, dr)*2;
+            this.grid.setSize(this.grid.rows+delta, this.grid.cols+delta);
+        }
     };
 
     Ant.prototype.getInBounds = function() {
