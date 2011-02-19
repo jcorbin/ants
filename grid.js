@@ -107,7 +107,7 @@ Ants.Grid = (function() {
     };
 
     Grid.prototype.isInBounds = function(row, col) {
-        return row >= 0 && col >= 0 && row <= this.rows && col <= this.cols;
+        return row >= 0 && col >= 0 && row < this.rows && col < this.cols;
     };
 
     Grid.prototype.step = function() {
