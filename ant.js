@@ -84,7 +84,7 @@ Ants.Ant = (function() {
             else
                 dc = 0;
             var delta = Math.max(dc, dr)*2;
-            this.grid.setSize(this.grid.rows+delta, this.grid.cols+delta);
+            this.grid.resize(this.grid.rows+delta, this.grid.cols+delta);
         }
     };
 

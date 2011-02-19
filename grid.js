@@ -35,7 +35,7 @@ Ants.Grid = (function() {
         ];
     };
 
-    Grid.prototype.setSize = function(rows, cols) {
+    Grid.prototype.resize = function(rows, cols) {
         // TODO: support controlling the center point
         var dc = (cols - this.cols)/2,
             dc_head = Math.floor(dc),
