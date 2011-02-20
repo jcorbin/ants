@@ -166,10 +166,8 @@ Ants.Grid = (function() {
     };
 
     Grid.prototype.step = function() {
-        for (var i=0; i<this.ants.length; i++) {
-            var ant = this.ants[i];
-            ant.step();
-        }
+        for (var i=0; i<this.ants.length; i++)
+            this.ants[i].step();
         this.iteration++;
     };
 
