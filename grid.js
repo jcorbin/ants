@@ -13,6 +13,7 @@ Ants.Grid = (function() {
         this.rows = rows || DefaultRows;
         this.cols = cols || DefaultCols;
         this.data = [];
+        this.iteration = 0;
         for (var i=0; i<this.rows; i++) {
             var row = [];
             for (var j=0; j<this.cols; j++)
@@ -161,6 +162,7 @@ Ants.Grid = (function() {
             this.drawCell(old_row, old_col);
             ant.draw();
         }
+        this.iteration++;
     };
 
     return Grid;
