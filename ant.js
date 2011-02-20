@@ -84,7 +84,7 @@ Ants.Ant = (function() {
 
     Ant.prototype.getInBounds = function() {
         if (this.row == null || this.col == null) {
-            // initital placement when added to grid
+            // initial placement when added to grid
             var t = (this.grid.ants.length+1);
             ant.row = Math.floor((t * Math.sin(t) + 50)/100 * this.grid.rows);
             ant.col = Math.floor((t * Math.cos(t) + 50)/100 * this.grid.cols);
