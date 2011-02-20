@@ -94,6 +94,8 @@ Ants.Ant = (function() {
                 rightof = this.grid.cols - this.col + 1;
             this.grid.resizeBy(leftof, rightof, above, below);
         }
+
+        this.draw();
     };
 
     Ant.prototype.getInBounds = function() {
