@@ -52,8 +52,12 @@
                         play();
                 });
 
+                function step() {
+                    grid.step();
+                }
+
                 function play() {
-                    i = setInterval(grid.step.bind(grid), delay);
+                    i = setInterval(step, delay);
                 }
 
                 function pause() {
