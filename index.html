@@ -10,6 +10,8 @@
         <div id="container">
             <canvas id="grid"></canvas>
             <button id="run_ctl">Play</button>
+            <button id="slower">Slower</button>
+            <button id="faster">Faster</button>
         </div>
         <script language="JavaScript">
             (function () {
@@ -24,6 +26,31 @@
                 var i = null;
 
                 var delay = 64;
+
+                var faster = document.getElementById('faster');
+                var slower = document.getElementById('slower');
+
+                slower.addEventListener('click', function() {
+                    var running = i != null;
+                    if (running)
+                        pause();
+                    delay *= 2;
+                    faster.disabled = delay <= 1;
+                    if (running)
+                        play();
+                });
+
+                faster.addEventListener('click', function() {
+                    var running = i != null;
+                    if (running)
+                        pause();
+                    if (delay > 1)
+                        delay /= 2;
+                    else
+                        faster.disabled = true;
+                    if (running)
+                        play();
+                });
 
                 function play() {
                     i = setInterval(grid.step.bind(grid), delay);
