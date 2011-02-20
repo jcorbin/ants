@@ -41,7 +41,15 @@ Ants.Ant = (function() {
         this.heading = heading || 0;
         this.color = color || '#f00';
         this.turns = parseTurnDirections(turns || DefaultTurns);
+        if (this.row != null && this.col != null)
+            this._saveInitialState();
+        else
+            this.initial_state = null;
     }
+
+    Ant.prototype._saveInitialState = function() {
+        this.initial_state = [this.row, this.col, this.heading];
+    };
 
     Ant.prototype.draw = function() {
         if (this.grid.frozen) return;
@@ -94,6 +102,7 @@ Ants.Ant = (function() {
             var t = (this.grid.ants.length+1);
             ant.row = Math.floor((t * Math.sin(t) + 50)/100 * this.grid.rows);
             ant.col = Math.floor((t * Math.cos(t) + 50)/100 * this.grid.cols);
+            this._saveInitialState();
         } else if (! this.grid.isInBounds(this.row, this.col)) {
             // grid resized leaving this ant out of bounds
             throw Error('unimplemented');
