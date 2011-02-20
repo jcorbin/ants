@@ -57,6 +57,8 @@ Ants.Ant = (function() {
         // Update current cell
         var c = this.grid.data[this.row][this.col];
         this.grid.data[this.row][this.col] = (c + 1) % this.grid.colors.length;
+        if (! this.grid.frozen)
+            this.grid.drawCell(this.row, this.col);
 
         // Move
         var t = this.turns[c];

@@ -167,10 +167,8 @@ Ants.Grid = (function() {
     Grid.prototype.step = function() {
         for (var i=0; i<this.ants.length; i++) {
             var ant = this.ants[i];
-            var old_row = ant.row, old_col = ant.col;
             ant.step();
             if (! this.frozen) {
-                this.drawCell(old_row, old_col);
                 ant.draw();
             }
         }
