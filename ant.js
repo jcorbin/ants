@@ -54,7 +54,11 @@ Ants.Ant = (function() {
     var TwoPI = 2*Math.PI;
 
     Ant.prototype.step = function() {
+        // Update current cell
         var c = this.grid.data[this.row][this.col];
+        this.grid.data[this.row][this.col] = (c + 1) % this.grid.colors.length;
+
+        // Move
         var t = this.turns[c];
         switch (t) {
             case Right:
@@ -64,10 +68,10 @@ Ants.Ant = (function() {
                 this.heading = (this.heading - HalfPI) % TwoPI;
                 break;
         }
-        this.grid.data[this.row][this.col] = (c + 1) % this.grid.colors.length;
         this.col += Math.round(Math.cos(this.heading));
         this.row += Math.round(Math.sin(this.heading));
 
+        // Bound check, resize grid if we went outside the rid
         if (! this.grid.isInBounds(this.row, this.col)) {
             var leftof = rightof = above = below = 0;
             if (this.row < 0)
