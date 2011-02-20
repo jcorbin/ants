@@ -12,20 +12,28 @@ Ants.Grid = (function() {
         this.ants = [];
         this.rows = rows || DefaultRows;
         this.cols = cols || DefaultCols;
-        this.data = [];
-        this.iteration = 0;
+        this.initial_state = [this.rows, this.cols];
         this.frozen = false;
         this.needsSizeUpdate = false;
+        window.addEventListener('resize', this.updateSize.bind(this));
+        this.reset();
+    }
+
+    Grid.prototype.reset = function() {
+        this.rows = this.initial_state[0];
+        this.cols = this.initial_state[1];
+        this.data = [];
         for (var i=0; i<this.rows; i++) {
             var row = [];
             for (var j=0; j<this.cols; j++)
                 row.push(0);
             this.data.push(row);
         }
-
-        window.addEventListener('resize', this.updateSize.bind(this));
+        this.iteration = 0;
+        for (var i=0; i<this.ants.length; i++)
+            this.ants[i].reset();
         this.updateSize();
-    }
+    };
 
     Grid.prototype.corners = function() {
         var right = this.cols-1;
