@@ -23,8 +23,10 @@
 
                 var i = null;
 
+                var delay = 64;
+
                 function play() {
-                    i = setInterval(grid.step.bind(grid), 100);
+                    i = setInterval(grid.step.bind(grid), delay);
                 }
 
                 function pause() {
