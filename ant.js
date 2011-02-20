@@ -44,6 +44,7 @@ Ants.Ant = (function() {
     }
 
     Ant.prototype.draw = function() {
+        if (this.grid.frozen) return;
         // TODO: oriented shape
         var ctx = this.grid.canvas.getContext('2d');
         ctx.fillStyle = this.color;
