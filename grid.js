@@ -131,6 +131,7 @@ Ants.Grid = (function() {
     };
 
     Grid.prototype.drawCell = function(row, col) {
+        if (this.frozen) return;
         var ctx = this.canvas.getContext('2d');
         ctx.fillStyle = this.colors[this.data[row][col]];
         ctx.fillRect(col, row, 1, 1);
