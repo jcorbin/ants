@@ -177,5 +177,20 @@ Ants.Grid = (function() {
         this.iteration++;
     };
 
+    Grid.prototype.setIteration = function(i) {
+        if (i == this.iteration)
+            return;
+        if (i < this.iteration)
+            throw Error("unimplemented: rewinding simulation");
+        this.frozen = true;
+        while (this.iteration < i)
+            this.step();
+        this.frozen = false;
+        if (this.needsSizeUpdate)
+            this.updateSize(); // calls render
+        else
+            this.render(); // or we do
+    };
+
     return Grid;
 })();
