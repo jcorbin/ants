@@ -51,6 +51,17 @@ Ants.Ant = (function() {
         this.initial_state = [this.row, this.col, this.heading];
     };
 
+    Ant.prototype.reset = function() {
+        if (this.initial_state) {
+            this.grid.drawCell(this.row, this.col);
+            this.row = this.initial_state[0];
+            this.col = this.initial_state[1];
+            this.heading = this.initial_state[2];
+        }
+        this.getInBounds();
+        this.draw();
+    };
+
     Ant.prototype.draw = function() {
         if (this.grid.frozen) return;
         // TODO: oriented shape
