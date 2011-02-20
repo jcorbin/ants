@@ -29,32 +29,34 @@
 
                 var i = null;
 
+                function pausedHandler(f) {
+                    function wrapped() {
+                        var running = i != null;
+                        if (running)
+                            pause();
+                        f.apply(this, arguments);
+                        if (running)
+                            play();
+                    }
+                    return wrapped.bind(this);
+                }
+
                 var delay = 64;
 
                 var faster = document.getElementById('faster');
                 var slower = document.getElementById('slower');
 
-                slower.addEventListener('click', function() {
-                    var running = i != null;
-                    if (running)
-                        pause();
+                slower.addEventListener('click', pausedHandler(function() {
                     delay *= 2;
                     faster.disabled = delay <= 1;
-                    if (running)
-                        play();
-                });
+                }));
 
-                faster.addEventListener('click', function() {
-                    var running = i != null;
-                    if (running)
-                        pause();
+                faster.addEventListener('click', pausedHandler(function() {
                     if (delay > 1)
                         delay /= 2;
                     else
                         faster.disabled = true;
-                    if (running)
-                        play();
-                });
+                }));
 
                 var iteration = document.getElementById('iteration');
                 iteration.value = grid.iteration.toString();
