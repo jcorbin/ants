@@ -157,8 +157,7 @@ Ants.Grid = (function() {
     Grid.prototype.addAnt = function(ant) {
         this.ants.push(ant);
         ant.grid = this;
-        ant.getInBounds();
-        ant.draw();
+        ant.reset();
     };
 
     Grid.prototype.isInBounds = function(row, col) {
