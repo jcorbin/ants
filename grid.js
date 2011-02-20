@@ -15,6 +15,7 @@ Ants.Grid = (function() {
         this.data = [];
         this.iteration = 0;
         this.frozen = false;
+        this.needsSizeUpdate = false;
         for (var i=0; i<this.rows; i++) {
             var row = [];
             for (var j=0; j<this.cols; j++)
@@ -102,6 +103,7 @@ Ants.Grid = (function() {
 
     Grid.prototype.updateSize = function() {
         if (this.frozen) {
+            this.needsSizeUpdate = true;
             return;
         }
 
@@ -116,6 +118,9 @@ Ants.Grid = (function() {
         ctx.scale(this.scale, this.scale);
 
         this.render();
+
+        if (this.needsSizeUpdate)
+            this.needsSizeUpdate = false;
     };
 
     Grid.prototype.randomize = function() {
