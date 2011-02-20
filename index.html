@@ -9,6 +9,7 @@
     <body>
         <div id="container">
             <canvas id="grid"></canvas>
+            <button id="reset">Reset</button>
             <button id="run_ctl">Play</button>
             <button id="slower">Slower</button>
             <button id="faster">Faster</button>
@@ -40,6 +41,11 @@
                     }
                     return wrapped.bind(this);
                 }
+
+                var reset = document.getElementById('reset');
+                reset.addEventListener('click', pausedHandler(function() {
+                    grid.reset();
+                }));
 
                 var delay = 64;
 
