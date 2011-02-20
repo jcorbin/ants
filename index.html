@@ -14,7 +14,7 @@
             <button id="faster">Faster</button>
             <div style="float: left">
                 <label for="iteration">Iteration:</label>
-                <input id="iteration" type="text" size="6" readonly="readonly" />
+                <input id="iteration" type="text" size="6" />
             </div>
         </div>
         <script language="JavaScript">
@@ -58,6 +58,13 @@
 
                 var iteration = document.getElementById('iteration');
                 iteration.value = grid.iteration.toString();
+                iteration.addEventListener('change', function() {
+                    var i = parseInt(iteration.value);
+                    if (isNaN(i) || i < grid.iteration)
+                        iteration.value = grid.iteration.toString();
+                    else
+                        grid.setIteration(i);
+                });
 
                 function step() {
                     grid.step();
@@ -66,12 +73,14 @@
 
                 function play() {
                     i = setInterval(step, delay);
+                    iteration.readOnly = true;
                 }
 
                 function pause() {
                     if (i != null) {
                         clearInterval(i);
                         i = null;
+                        iteration.readOnly = false;
                     }
                 }
 
