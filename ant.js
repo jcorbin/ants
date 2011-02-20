@@ -69,22 +69,16 @@ Ants.Ant = (function() {
         this.row += Math.round(Math.sin(this.heading));
 
         if (! this.grid.isInBounds(this.row, this.col)) {
-            // TODO smallest non-zero diff
-            var dr, dc;
+            var leftof = rightof = above = below = 0;
             if (this.row < 0)
-                dr = 0 - this.row;
+                above = 0 - this.row;
             else if (this.row >= this.grid.rows)
-                dr = this.grid.rows - this.row + 1;
-            else
-                dr = 0;
+                below = this.grid.rows - this.row + 1;
             if (this.col < 0)
-                dc = 0 - this.col;
+                leftof = 0 - this.col;
             else if (this.col >= this.grid.cols)
-                dc = this.grid.cols - this.col + 1;
-            else
-                dc = 0;
-            var delta = Math.max(dc, dr)*2;
-            this.grid.resize(this.grid.rows+delta, this.grid.cols+delta);
+                rightof = this.grid.cols - this.col + 1;
+            this.grid.resizeBy(leftof, rightof, above, below);
         }
     };
 
