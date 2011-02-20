@@ -122,7 +122,7 @@ Ants.Grid = (function() {
     Grid.prototype.drawCell = function(row, col) {
         var ctx = this.canvas.getContext('2d');
         ctx.fillStyle = this.colors[this.data[row][col]];
-        ctx.fillRect(row, col, 1, 1);
+        ctx.fillRect(col, row, 1, 1);
     };
 
     Grid.prototype.render = function() {

@@ -47,7 +47,7 @@ Ants.Ant = (function() {
         // TODO: oriented shape
         var ctx = this.grid.canvas.getContext('2d');
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.row+0.25, this.col+0.25, 0.5, 0.5);
+        ctx.fillRect(this.col+0.25, this.row+0.25, 0.5, 0.5);
     };
 
     var HalfPI = Math.PI/2;
