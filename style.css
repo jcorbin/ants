@@ -12,3 +12,7 @@ html, body {
     margin: 1%;
     height: 99%;
 }
+
+#container button {
+    float: left;
+}
