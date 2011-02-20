@@ -169,9 +169,7 @@ Ants.Grid = (function() {
         for (var i=0; i<this.ants.length; i++) {
             var ant = this.ants[i];
             ant.step();
-            if (! this.frozen) {
-                ant.draw();
-            }
+            ant.draw();
         }
         this.iteration++;
     };
