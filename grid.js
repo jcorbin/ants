@@ -6,6 +6,21 @@ Ants.Grid = (function() {
     var DefaultRows = 50;
     var DefaultCols = 50;
 
+    function frozenMethod(f) {
+        function wrapped() {
+            var old = this.frozen;
+            this.frozen = true;
+            var r = f.apply(this, arguments);
+            this.frozen = old;
+            if (this.needsSizeUpdate)
+                this.updateSize(); // calls render
+            else
+                this.render(); // or we do
+            return r;
+        }
+        return wrapped;
+    }
+
     function Grid(canvas, rows, cols, colors) {
         this.colors = colors || DefaultColors;
         this.canvas = canvas;
@@ -19,9 +34,10 @@ Ants.Grid = (function() {
         this.reset();
     }
 
-    Grid.prototype.reset = function() {
+    Grid.prototype.reset = frozenMethod(function() {
         this.rows = this.initial_state[0];
         this.cols = this.initial_state[1];
+
         this.data = [];
         for (var i=0; i<this.rows; i++) {
             var row = [];
@@ -33,7 +49,7 @@ Ants.Grid = (function() {
         for (var i=0; i<this.ants.length; i++)
             this.ants[i].reset();
         this.updateSize();
-    };
+    });
 
     Grid.prototype.corners = function() {
         var right = this.cols-1;
@@ -178,20 +194,14 @@ Ants.Grid = (function() {
         this.iteration++;
     };
 
-    Grid.prototype.setIteration = function(i) {
+    Grid.prototype.setIteration = frozenMethod(function(i) {
         if (i == this.iteration)
             return;
         if (i < this.iteration)
             throw Error("unimplemented: rewinding simulation");
-        this.frozen = true;
         while (this.iteration < i)
             this.step();
-        this.frozen = false;
-        if (this.needsSizeUpdate)
-            this.updateSize(); // calls render
-        else
-            this.render(); // or we do
-    };
+    });
 
     return Grid;
 })();
