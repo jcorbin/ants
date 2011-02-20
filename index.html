@@ -12,6 +12,10 @@
             <button id="run_ctl">Play</button>
             <button id="slower">Slower</button>
             <button id="faster">Faster</button>
+            <div style="float: left">
+                <label for="iteration">Iteration:</label>
+                <input id="iteration" type="text" size="6" readonly="readonly" />
+            </div>
         </div>
         <script language="JavaScript">
             (function () {
@@ -52,8 +56,12 @@
                         play();
                 });
 
+                var iteration = document.getElementById('iteration');
+                iteration.value = grid.iteration.toString();
+
                 function step() {
                     grid.step();
+                    iteration.value = grid.iteration.toString();
                 }
 
                 function play() {
