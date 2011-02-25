@@ -47,6 +47,15 @@ Ants.Ant = (function() {
             this.initial_state = null;
     }
 
+    Ant.Turn2Name = function(turn) {
+        switch (turn) {
+            case Right:
+                return "Right";
+            case Left:
+                return "Left";
+        }
+    }
+
     Ant.prototype._saveInitialState = function() {
         this.initial_state = [this.row, this.col, this.heading];
     };
