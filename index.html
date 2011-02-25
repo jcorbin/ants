@@ -75,10 +75,11 @@
                 }
 
                 var reset = document.getElementById('reset');
-                reset.addEventListener('click', pausedHandler(function() {
+                function doReset() {
                     grid.reset();
                     iteration.value = grid.iteration.toString();
-                }));
+                }
+                reset.addEventListener('click', pausedHandler(doReset));
 
                 var delay = 64, steps = 1;
 
