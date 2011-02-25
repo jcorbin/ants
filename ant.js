@@ -47,6 +47,9 @@ Ants.Ant = (function() {
             this.initial_state = null;
     }
 
+    Ant.TurnLeft = Left;
+    Ant.TurnRight = Right;
+
     Ant.Turn2Name = function(turn) {
         switch (turn) {
             case Right:
