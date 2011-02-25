@@ -118,6 +118,7 @@
                 function play() {
                     stepHandle = setInterval(step, delay);
                     iteration.readOnly = true;
+                    runctl.innerText = 'Pause';
                 }
 
                 function pause() {
@@ -125,6 +126,7 @@
                         clearInterval(stepHandle);
                         stepHandle = null;
                         iteration.readOnly = false;
+                        runctl.innerText = 'Play';
                     }
                 }
 
@@ -134,13 +136,10 @@
 
                 var runctl = document.getElementById('run_ctl');
                 runctl.addEventListener('click', function() {
-                    if (stepHandle == null) {
+                    if (stepHandle == null)
                         play();
-                        runctl.innerText = 'Pause';
-                    } else {
+                    else
                         pause();
-                        runctl.innerText = 'Play';
-                    }
                 });
 
                 // TODO support multiple ants
