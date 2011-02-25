@@ -45,6 +45,7 @@
                 var reset = document.getElementById('reset');
                 reset.addEventListener('click', pausedHandler(function() {
                     grid.reset();
+                    iteration.value = grid.iteration.toString();
                 }));
 
                 var delay = 64;
