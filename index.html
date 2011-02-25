@@ -60,11 +60,11 @@
                 );
                 grid.addAnt(ant);
 
-                var i = null;
+                var stepHandle = null;
 
                 function pausedHandler(f) {
                     function wrapped() {
-                        var running = i != null;
+                        var running = stepHandle != null;
                         if (running)
                             pause();
                         f.apply(this, arguments);
@@ -116,14 +116,14 @@
                 }
 
                 function play() {
-                    i = setInterval(step, delay);
+                    stepHandle = setInterval(step, delay);
                     iteration.readOnly = true;
                 }
 
                 function pause() {
-                    if (i != null) {
-                        clearInterval(i);
-                        i = null;
+                    if (stepHandle != null) {
+                        clearInterval(stepHandle);
+                        stepHandle = null;
                         iteration.readOnly = false;
                     }
                 }
@@ -134,7 +134,7 @@
 
                 var runctl = document.getElementById('run_ctl');
                 runctl.addEventListener('click', function() {
-                    if (i == null) {
+                    if (stepHandle == null) {
                         play();
                         runctl.innerText = 'Pause';
                     } else {
