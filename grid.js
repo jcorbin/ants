@@ -188,10 +188,11 @@ Ants.Grid = (function() {
         return row >= 0 && col >= 0 && row < this.rows && col < this.cols;
     };
 
-    Grid.prototype.step = function() {
-        for (var i=0; i<this.ants.length; i++)
-            this.ants[i].step();
-        this.iteration++;
+    Grid.prototype.step = function(n) {
+        for (var i=0; i<n; i++)
+            for (var j=0; j<this.ants.length; j++)
+                this.ants[j].step();
+        this.iteration += n;
     };
 
     Grid.prototype.setIteration = frozenMethod(function(i) {
@@ -199,8 +200,7 @@ Ants.Grid = (function() {
             return;
         if (i < this.iteration)
             throw Error("unimplemented: rewinding simulation");
-        while (this.iteration < i)
-            this.step();
+        this.step(i - this.iteration);
     });
 
     return Grid;

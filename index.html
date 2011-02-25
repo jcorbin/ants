@@ -48,7 +48,7 @@
                     iteration.value = grid.iteration.toString();
                 }));
 
-                var delay = 64;
+                var delay = 64, steps = 1;
 
                 var faster = document.getElementById('faster');
                 var slower = document.getElementById('slower');
@@ -76,7 +76,7 @@
                 });
 
                 function step() {
-                    grid.step();
+                    grid.step(steps);
                     iteration.value = grid.iteration.toString();
                 }
 
