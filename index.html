@@ -41,10 +41,22 @@
         <script language="JavaScript">
             (function () {
                 var grid = document.getElementById('grid');
-                grid = new Ants.Grid(grid, 10, 10);
+                grid = new Ants.Grid(
+                    grid, // canvas
+                    10,   // rows
+                    10,   // cols
+                    [     // colors
+                        "hsl(0, 75%, 40%)",
+                        "hsl(180, 75%, 40%)"
+                    ]
+                );
 
                 var ant = new Ants.Ant(
-                    Math.floor(grid.rows/2), Math.floor(grid.cols/2)
+                    Math.floor(grid.rows/2), // row
+                    Math.floor(grid.cols/2), // col
+                    0,                       // heading (radians)
+                    "#fff",                  // color
+                    "RL"                     // turns
                 );
                 grid.addAnt(ant);
 
