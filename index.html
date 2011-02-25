@@ -25,6 +25,13 @@
                         <th>turn.</th>
                     </tr>
                 </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">
+                            <button id="rule_add">Add Rule</button>
+                        </td>
+                    </tr>
+                </tfoot>
                 <tbody>
                     <tr>
                         <td>&nbsp;</td>
@@ -179,6 +186,22 @@
                 }
                 initRules();
 ;
+                document.getElementById("rule_add").addEventListener("click", function() {
+                    pause();
+                    var ncolors = grid.colors.length+1;
+                    var colors = [];
+                    for (var i=0; i<ncolors; i++)
+                        colors.push("hsl("
+                            +Math.floor(360*i/ncolors).toString()
+                            +", 75%, 40%)")
+                    grid.colors = colors;
+                    grid.ants.forEach(function(ant) {
+                        while (ant.turns.length < ncolors)
+                            ant.turns.push(Ants.Ant.TurnLeft);
+                    });
+                    doReset();
+                    initRules();
+                });
             })();
         </script>
     </body>
