@@ -20,3 +20,8 @@ html, body {
 #container button {
     float: left;
 }
+
+#rules {
+    float: left;
+    clear: left;
+}

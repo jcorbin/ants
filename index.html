@@ -17,6 +17,26 @@
                 <label for="iteration">Iteration:</label>
                 <input id="iteration" type="text" size="6" />
             </div>
+            <table id="rules">
+                <caption>Ant Rules</caption>
+                <thead>
+                    <tr>
+                        <th>On color</th>
+                        <th>turn.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <select>
+                                <option>Left</option>
+                                <option>Right</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <script language="JavaScript">
             (function () {
@@ -109,6 +129,31 @@
                         runctl.innerText = 'Play';
                     }
                 });
+
+                // TODO support multiple ants
+                var ant = grid.ants[0];
+                var rules = document.getElementById('rules');
+                var rulebody = rules.tBodies[0];
+                var rulerow = rulebody.rows[0];
+                rulebody.removeChild(rulerow);
+
+                function addRuleRow(color, rule) {
+                    var row = rulerow.cloneNode(true);
+                    rulebody.appendChild(row);
+                    row.cells[0].style.backgroundColor = color;
+                    var select = row.getElementsByTagName('select')[0];
+                    select.value = rule;
+                }
+
+                function initRules() {
+                    while (rulebody.childNodes.length)
+                        rulebody.removeChild(rulebody.firstChild);
+                    for (var i=0; i<ant.turns.length; i++)
+                        addRuleRow(grid.colors[i],
+                            Ants.Ant.Turn2Name(ant.turns[i]));
+                }
+                initRules();
+;
             })();
         </script>
     </body>
