@@ -54,15 +54,17 @@
                 var slower = document.getElementById('slower');
 
                 slower.addEventListener('click', pausedHandler(function() {
-                    delay *= 2;
-                    faster.disabled = delay <= 1;
+                    if (steps > 1)
+                        steps /= 2
+                    else
+                        delay *= 2;
                 }));
 
                 faster.addEventListener('click', pausedHandler(function() {
                     if (delay > 1)
                         delay /= 2;
                     else
-                        faster.disabled = true;
+                        steps *= 2;
                 }));
 
                 var iteration = document.getElementById('iteration');
