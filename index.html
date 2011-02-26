@@ -52,15 +52,21 @@
         </div>
         <script language="JavaScript">
             (function () {
+                function generateColors(ncolors) {
+                    var colors = [];
+                    for (var i=0; i<ncolors; i++)
+                        colors.push("hsl("
+                            +Math.floor(360*i/ncolors).toString()
+                            +", 75%, 40%)")
+                    return colors;
+                }
+
                 var grid = document.getElementById('grid');
                 grid = new Ants.Grid(
                     grid, // canvas
                     10,   // rows
                     10,   // cols
-                    [     // colors
-                        "hsl(0, 75%, 40%)",
-                        "hsl(180, 75%, 40%)"
-                    ]
+                    generateColors(2)
                 );
 
                 var ant = new Ants.Ant(
@@ -194,12 +200,7 @@
                 rules.getElementsByClassName("rule_add")[0].addEventListener("click", function() {
                     pause();
                     var ncolors = grid.colors.length+1;
-                    var colors = [];
-                    for (var i=0; i<ncolors; i++)
-                        colors.push("hsl("
-                            +Math.floor(360*i/ncolors).toString()
-                            +", 75%, 40%)")
-                    grid.colors = colors;
+                    grid.colors = generateColors(ncolors);
                     grid.ants.forEach(function(ant) {
                         while (ant.turns.length < ncolors)
                             ant.turns.push(Ants.Ant.TurnLeft);
