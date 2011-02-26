@@ -30,7 +30,7 @@
                     <tr>
                         <td colspan="2">&nbsp;</td>
                         <td>
-                            <button id="rule_add">+</button>
+                            <button class="rule_add">+</button>
                         </td>
                     </tr>
                 </tfoot>
@@ -191,7 +191,7 @@
                 }
                 initRules();
 ;
-                document.getElementById("rule_add").addEventListener("click", function() {
+                rules.getElementsByClassName("rule_add")[0].addEventListener("click", function() {
                     pause();
                     var ncolors = grid.colors.length+1;
                     var colors = [];
