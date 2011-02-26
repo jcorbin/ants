@@ -44,7 +44,7 @@
                             </select>
                         </td>
                         <td>
-                            &nbsp;
+                            <button class="rule_del">-</button>
                         </td>
                     </tr>
                 </tbody>
@@ -179,6 +179,27 @@
                     doReset();
                 }
 
+                function delRuleClicked(e) {
+                    if (grid.colors.length <= 2)
+                        return;
+                    var row = e.target;
+                    while (row.tagName.toLowerCase() != "tr")
+                        row = row.parentNode;
+                    var rows = row.parentNode.rows;
+                    for (var i=0; i<rows.length; i++)
+                        if (rows[i] === row)
+                            break;
+                    if (i >= rows.length)
+                        return;
+                    pause();
+                    grid.colors = generateColors(grid.colors.length-1);
+                    grid.ants.forEach(function(ant) {
+                        ant.turns.splice(i, 1);
+                    });
+                    doReset();
+                    initRules();
+                }
+
                 function addRuleRow(color, rule) {
                     var row = rulerow.cloneNode(true);
                     rulebody.appendChild(row);
@@ -186,6 +207,8 @@
                     var select = row.getElementsByTagName('select')[0];
                     select.value = rule;
                     select.addEventListener('change', updateRules);
+                    var rule_del = row.getElementsByClassName("rule_del")[0];
+                    rule_del.addEventListener("click", delRuleClicked);
                 }
 
                 function initRules() {
@@ -194,6 +217,10 @@
                     for (var i=0; i<ant.turns.length; i++)
                         addRuleRow(grid.colors[i],
                             Ants.Ant.Turn2Name(ant.turns[i]));
+                    var disabled = grid.colors.length <= 2;
+                    var buttons = rules.getElementsByClassName("rule_del");
+                    for (var i=0; i<buttons.length; i++)
+                        buttons[i].disabled = disabled;
                 }
                 initRules();
 
