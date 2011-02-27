@@ -101,22 +101,21 @@
 
                 var delay = 64, steps = 1;
 
-                var faster = document.getElementById('faster');
-                var slower = document.getElementById('slower');
+                document.getElementById('slower').addEventListener('click',
+                    pausedHandler(function() {
+                        if (steps > 1)
+                            steps /= 2
+                        else
+                            delay *= 2;
+                    }));
 
-                slower.addEventListener('click', pausedHandler(function() {
-                    if (steps > 1)
-                        steps /= 2
-                    else
-                        delay *= 2;
-                }));
-
-                faster.addEventListener('click', pausedHandler(function() {
-                    if (delay > 1)
-                        delay /= 2;
-                    else
-                        steps *= 2;
-                }));
+                document.getElementById('faster').addEventListener('click',
+                    pausedHandler(function() {
+                        if (delay > 1)
+                            delay /= 2;
+                        else
+                            steps *= 2;
+                    }));
 
                 var iteration = document.getElementById('iteration');
                 iteration.value = grid.iteration.toString();
