@@ -93,12 +93,11 @@
                     return wrapped.bind(this);
                 }
 
-                var reset = document.getElementById('reset');
-                function doReset() {
-                    grid.reset();
+                grid.addListener("reset", function() {
                     iteration.value = grid.iteration.toString();
-                }
-                reset.addEventListener('click', pausedHandler(doReset));
+                });
+                document.getElementById('reset').addEventListener('click',
+                    grid.reset.bind(grid));
 
                 var delay = 64, steps = 1;
 
@@ -177,7 +176,7 @@
                         turns.push(Ants.Ant.Name2Turn(select.value));
                     }
                     ant.turns = turns;
-                    doReset();
+                    grid.reset();
                 }
 
                 function delRuleClicked(e) {
@@ -197,7 +196,7 @@
                     grid.ants.forEach(function(ant) {
                         ant.turns.splice(i, 1);
                     });
-                    doReset();
+                    grid.reset();
                     initRules();
                 }
 
@@ -233,7 +232,7 @@
                         while (ant.turns.length < ncolors)
                             ant.turns.push(Ants.Ant.TurnLeft);
                     });
-                    doReset();
+                    grid.reset();
                     initRules();
                 });
             })();
