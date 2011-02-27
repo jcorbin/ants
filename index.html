@@ -147,9 +147,7 @@
                     }
                 }
 
-                window.addEventListener('error', function() {
-                    pause();
-                });
+                window.addEventListener("error", pause);
 
                 var runctl = document.getElementById('run_ctl');
                 runctl.addEventListener('click', function() {
