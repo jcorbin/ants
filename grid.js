@@ -51,6 +51,7 @@ Ants.Grid = (function() {
         for (var i=0; i<this.ants.length; i++)
             this.ants[i].reset();
         this.updateSize();
+        this.dispatch("reset");
     });
 
     Grid.prototype.corners = function() {
