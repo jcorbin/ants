@@ -34,6 +34,8 @@ Ants.Grid = (function() {
         this.reset();
     }
 
+    Grid.prototype = new EventDispatcher();
+
     Grid.prototype.reset = frozenMethod(function() {
         this.rows = this.initial_state[0];
         this.cols = this.initial_state[1];
