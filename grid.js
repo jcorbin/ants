@@ -32,9 +32,54 @@ Ants.Grid = (function() {
         this.needsSizeUpdate = false;
         window.addEventListener('resize', this.updateSize.bind(this));
         this.reset();
+
+        this.running = null;
+        this.runDelay = 64;
+        this.runSteps = 1;
     }
 
     Grid.prototype = new EventDispatcher();
+
+    Grid.prototype.runStep = function() {
+        this.step(this.runSteps);
+    };
+
+    Grid.prototype.play = function() {
+        if (this.running == null) {
+            this.running = setInterval(this.runStep.bind(this), this.runDelay);
+            this.dispatch("play");
+        }
+    };
+
+    Grid.prototype.stop = function() {
+        if (this.running != null) {
+            clearInterval(this.running);
+            this.running = null;
+            this.dispatch("stop");
+        }
+    };
+
+    Grid.prototype.runFaster = function(factor) {
+        if (this.runDelay > 1)
+            this.runDelay /= factor;
+        else
+            this.runSteps *= factor;
+        if (this.running != null) {
+            clearInterval(this.running);
+            this.running = setInterval(this.runStep.bind(this), this.runDelay);
+        }
+    };
+
+    Grid.prototype.runSlower = function(factor) {
+        if (this.runSteps > 1)
+            this.runSteps /= factor;
+        else
+            this.runDelay *= factor;
+        if (this.running != null) {
+            clearInterval(this.running);
+            this.running = setInterval(this.runStep.bind(this), this.runDelay);
+        }
+    };
 
     Grid.prototype.reset = frozenMethod(function() {
         this.rows = this.initial_state[0];
@@ -196,6 +241,7 @@ Ants.Grid = (function() {
             for (var j=0; j<this.ants.length; j++)
                 this.ants[j].step();
         this.iteration += n;
+        this.dispatch("step");
     };
 
     Grid.prototype.setIteration = frozenMethod(function(i) {

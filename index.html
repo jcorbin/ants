@@ -79,43 +79,17 @@
                 );
                 grid.addAnt(ant);
 
-                var stepHandle = null;
-
-                function pausedHandler(f) {
-                    function wrapped() {
-                        var running = stepHandle != null;
-                        if (running)
-                            pause();
-                        f.apply(this, arguments);
-                        if (running)
-                            play();
-                    }
-                    return wrapped.bind(this);
-                }
-
                 grid.addListener("reset", function() {
                     iteration.value = grid.iteration.toString();
                 });
                 document.getElementById('reset').addEventListener('click',
                     grid.reset.bind(grid));
 
-                var delay = 64, steps = 1;
-
                 document.getElementById('slower').addEventListener('click',
-                    pausedHandler(function() {
-                        if (steps > 1)
-                            steps /= 2
-                        else
-                            delay *= 2;
-                    }));
+                    function() {grid.runSlower(2)});
 
                 document.getElementById('faster').addEventListener('click',
-                    pausedHandler(function() {
-                        if (delay > 1)
-                            delay /= 2;
-                        else
-                            steps *= 2;
-                    }));
+                    function() {grid.runFaster(2)});
 
                 var iteration = document.getElementById('iteration');
                 iteration.value = grid.iteration.toString();
@@ -127,34 +101,28 @@
                         grid.setIteration(i);
                 });
 
-                function step() {
-                    grid.step(steps);
+                grid.addListener("step", function() {
                     iteration.value = grid.iteration.toString();
-                }
+                });
 
-                function play() {
-                    stepHandle = setInterval(step, delay);
+                grid.addListener("play", function() {
                     iteration.readOnly = true;
                     runctl.innerText = 'Pause';
-                }
+                });
 
-                function pause() {
-                    if (stepHandle != null) {
-                        clearInterval(stepHandle);
-                        stepHandle = null;
-                        iteration.readOnly = false;
-                        runctl.innerText = 'Play';
-                    }
-                }
+                grid.addListener("stop", function() {
+                    iteration.readOnly = false;
+                    runctl.innerText = 'Play';
+                });
 
-                window.addEventListener("error", pause);
+                window.addEventListener("error", grid.stop.bind(grid));
 
                 var runctl = document.getElementById('run_ctl');
                 runctl.addEventListener('click', function() {
-                    if (stepHandle == null)
-                        play();
+                    if (grid.running == null)
+                        grid.play();
                     else
-                        pause();
+                        grid.stop();
                 });
 
                 // TODO support multiple ants
@@ -165,7 +133,7 @@
                 rulebody.removeChild(rulerow);
 
                 function updateRules() {
-                    pause();
+                    grid.stop();
                     var turns = [];
                     for (var i=0; i<rulebody.rows.length; i++) {
                         var row = rulebody.rows[i];
@@ -188,7 +156,7 @@
                             break;
                     if (i >= rows.length)
                         return;
-                    pause();
+                    grid.stop();
                     grid.colors = generateColors(grid.colors.length-1);
                     grid.ants.forEach(function(ant) {
                         ant.turns.splice(i, 1);
@@ -222,7 +190,7 @@
                 initRules();
 
                 rules.getElementsByClassName("rule_add")[0].addEventListener("click", function() {
-                    pause();
+                    grid.stop();
                     var ncolors = grid.colors.length+1;
                     grid.colors = generateColors(ncolors);
                     grid.ants.forEach(function(ant) {
