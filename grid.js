@@ -2,7 +2,6 @@ if (typeof(Ants) == 'undefined')
     Ants = {};
 
 Ants.Grid = (function() {
-    var DefaultColors = ['#fff', '#000'];
     var DefaultRows = 50;
     var DefaultCols = 50;
 
@@ -22,7 +21,7 @@ Ants.Grid = (function() {
     }
 
     function Grid(canvas, rows, cols, colors) {
-        this.colors = colors || DefaultColors;
+        this.colors = colors || this.generateColors(2);
         this.canvas = canvas;
         this.ants = [];
         this.rows = rows || DefaultRows;
@@ -39,6 +38,15 @@ Ants.Grid = (function() {
     }
 
     Grid.prototype = new EventDispatcher();
+
+    Grid.prototype.generateColors = function(ncolors) {
+        var colors = [];
+        for (var i=0; i<ncolors; i++)
+            colors.push("hsl("
+                +Math.floor(360*i/ncolors).toString()
+                +", 75%, 40%)")
+        return colors;
+    };
 
     Grid.prototype.runStep = function() {
         this.step(this.runSteps);
