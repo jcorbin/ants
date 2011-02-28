@@ -148,11 +148,7 @@
                     if (i >= rows.length)
                         return;
                     grid.stop();
-                    grid.colors = grid.generateColors(grid.colors.length-1);
-                    grid.ants.forEach(function(ant) {
-                        ant.turns.splice(i, 1);
-                    });
-                    grid.reset();
+                    grid.removeColor(i);
                     initRules();
                 }
 

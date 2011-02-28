@@ -48,6 +48,14 @@ Ants.Grid = (function() {
         return colors;
     };
 
+    Grid.prototype.removeColor = function(index) {
+        this.colors = this.generateColors(this.colors.length-1);
+        this.ants.forEach(function(ant) {
+            ant.turns.splice(index, 1);
+        });
+        this.reset();
+    };
+
     Grid.prototype.runStep = function() {
         this.step(this.runSteps);
     };
