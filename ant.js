@@ -53,6 +53,12 @@ Ants.Ant = (function() {
         }
     };
 
+    Ant.prototype.getTurnString = function() {
+        return this.turns.map(function(turn) {
+            return Ant.Turn2Name(turn)[0].toUpperCase();
+        }).join("");
+    };
+
     Ant.prototype.setTurnString = function(s) {
         var d = [];
         s = s.toLowerCase();
