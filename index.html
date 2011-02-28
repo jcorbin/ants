@@ -178,13 +178,7 @@
 
                 rules.getElementsByClassName("rule_add")[0].addEventListener("click", function() {
                     grid.stop();
-                    var ncolors = grid.colors.length+1;
-                    grid.colors = grid.generateColors(ncolors);
-                    grid.ants.forEach(function(ant) {
-                        while (ant.turns.length < ncolors)
-                            ant.turns.push(Ants.Ant.TurnLeft);
-                    });
-                    grid.reset();
+                    grid.addColor();
                     initRules();
                 });
             })();

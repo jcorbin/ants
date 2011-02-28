@@ -56,6 +56,16 @@ Ants.Grid = (function() {
         this.reset();
     };
 
+    Grid.prototype.addColor = function(index) {
+        var ncolors = this.colors.length+1;
+        this.colors = this.generateColors(ncolors);
+        this.ants.forEach(function(ant) {
+            while (ant.turns.length < ncolors)
+                ant.turns.push(Ants.Ant.TurnLeft);
+        });
+        this.reset();
+    };
+
     Grid.prototype.runStep = function() {
         this.step(this.runSteps);
     };
