@@ -20,27 +20,12 @@ Ants.Ant = (function() {
         return cur;
     }
 
-    function parseTurnDirections(s) {
-        var d = [];
-        s = s.toLowerCase();
-        for (var i=0; i<s.length; i++) {
-            var c = s[i];
-            if (c == 'r')
-                d.push(Right);
-            else if (c == 'l')
-                d.push(Left);
-            else
-                throw Error('Invalid turn direction');
-        }
-        return d;
-    }
-
     function Ant(row, col, heading, color, turns) {
         this.row = row || null;
         this.col = col || null;
         this.heading = heading || 0;
         this.color = color || '#f00';
-        this.turns = parseTurnDirections(turns || DefaultTurns);
+        this.setTurnString(turns || DefaultTurns);
         if (this.row != null && this.col != null)
             this._saveInitialState();
         else
@@ -66,6 +51,21 @@ Ants.Ant = (function() {
             case "left":
                 return Left;
         }
+    };
+
+    Ant.prototype.setTurnString = function(s) {
+        var d = [];
+        s = s.toLowerCase();
+        for (var i=0; i<s.length; i++) {
+            var c = s[i];
+            if (c == 'r')
+                d.push(Right);
+            else if (c == 'l')
+                d.push(Left);
+            else
+                throw Error('Invalid turn direction');
+        }
+        this.turns = d;
     };
 
     Ant.prototype._saveInitialState = function() {
