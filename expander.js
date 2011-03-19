@@ -82,9 +82,11 @@ var Expander = (function() {
         }
         this.refresh();
         this.element.style.visibility = "visible";
+
+        var view = this.element.ownerDocument.defaultView;
         if (! this._onviewresize) {
             this._onviewresize = this.refresh.bind(this);
-            this.element.ownerDocument.defaultView.addEventListener("resize", this._onviewresize);
+            view.addEventListener("resize", this._onviewresize);
         }
     };
 
@@ -101,8 +103,10 @@ var Expander = (function() {
             delete this.collapseDelay;
         }
         this.element.style.visibility = "hidden";
+
+        var view = this.element.ownerDocument.defaultView;
         if (this._onviewresize) {
-            this.element.ownerDocument.defaultView.removeEventListener("resize", this._onviewresize);
+            view.removeEventListener("resize", this._onviewresize);
             delete this._onviewresize;
         }
     };
