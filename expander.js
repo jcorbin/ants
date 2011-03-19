@@ -74,6 +74,16 @@ var Expander = (function() {
             moveToClamped(this.element, anch[0], anch[3], view);
     };
 
+    Expander.prototype.onViewClick = function(e) {
+        var el = e.target;
+        while (el) {
+            if (el == this.element || el == this.anchor)
+                return;
+            el = el.parentNode;
+        }
+        this.collapse();
+    };
+
     Expander.prototype.expand = function() {
         this.refresh();
         this.element.style.visibility = "visible";
@@ -82,6 +92,10 @@ var Expander = (function() {
         if (! this._onviewresize) {
             this._onviewresize = this.refresh.bind(this);
             view.addEventListener("resize", this._onviewresize);
+        }
+        if (! this._onviewclick) {
+            this._onviewclick = this.onViewClick.bind(this);
+            view.addEventListener("click", this._onviewclick);
         }
     };
 
@@ -92,6 +106,10 @@ var Expander = (function() {
         if (this._onviewresize) {
             view.removeEventListener("resize", this._onviewresize);
             delete this._onviewresize;
+        }
+        if (! this._onviewclick) {
+            view.removeEventListener("click", this._onviewclick);
+            delete this._onviewclick;
         }
     };
 
