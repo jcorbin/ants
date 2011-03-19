@@ -55,7 +55,6 @@ var Expander = (function() {
                 doc.body.appendChild(this.element);
             }
         }
-        this.collapseDelay = null;
     }
 
     Expander.prototype = new EventDispatcher();
@@ -76,10 +75,6 @@ var Expander = (function() {
     };
 
     Expander.prototype.expand = function() {
-        if (this.collapseDelay) {
-            clearTimeout(this.collapseDelay);
-            delete this.collapseDelay;
-        }
         this.refresh();
         this.element.style.visibility = "visible";
 
@@ -90,18 +85,7 @@ var Expander = (function() {
         }
     };
 
-    Expander.prototype.delayCollapse = function(delay) {
-        delay = delay || 100;
-        if (this.collapseDelay)
-            clearTimeout(this.collapseDelay);
-        this.collapseDelay = setTimeout(this.collapse.bind(this), delay);
-    };
-
     Expander.prototype.collapse = function() {
-        if (this.collapseDelay) {
-            clearTimeout(this.collapseDelay);
-            delete this.collapseDelay;
-        }
         this.element.style.visibility = "hidden";
 
         var view = this.element.ownerDocument.defaultView;
