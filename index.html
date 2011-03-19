@@ -7,6 +7,7 @@
         <script src="grid.js" language="JavaScript"></script>
         <script src="ant.js" language="JavaScript"></script>
         <script src="expander.js" language="JavaScript"></script>
+        <script src="ruleseditor.js" language="JavaScript"></script>
     </head>
     <body>
         <div id="container">
@@ -19,38 +20,10 @@
                 <label for="iteration">Iteration:</label>
                 <input id="iteration" type="text" size="6" />
             </div>
-            <table id="rules">
-                <caption>Ant Rules</caption>
-                <thead>
-                    <tr>
-                        <th>On color</th>
-                        <th>turn.</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <td colspan="2">&nbsp;</td>
-                        <td>
-                            <button class="rule_add">+</button>
-                        </td>
-                    </tr>
-                </tfoot>
-                <tbody>
-                    <tr>
-                        <td class="swatch">&nbsp;</td>
-                        <td>
-                            <select>
-                                <option>Left</option>
-                                <option>Right</option>
-                            </select>
-                        </td>
-                        <td>
-                            <button class="rule_del">-</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div style="float: left">
+                <label for="rules">Rules:</label>
+                <input id="rules" type="text" size="3" />
+            </div>
         </div>
         <script language="JavaScript">
             (function () {
@@ -116,71 +89,8 @@
                         grid.stop();
                 });
 
-                // TODO support multiple ants
-                var ant = grid.ants[0];
-                var rules = document.getElementById('rules');
-                var rulebody = rules.tBodies[0];
-                var rulerow = rulebody.rows[0];
-                rulebody.removeChild(rulerow);
-
-                function updateRules() {
-                    grid.stop();
-                    var turns = [];
-                    for (var i=0; i<rulebody.rows.length; i++) {
-                        var row = rulebody.rows[i];
-                        var select = row.getElementsByTagName("select")[0];
-                        turns.push(Ants.Ant.Name2Turn(select.value));
-                    }
-                    ant.turns = turns;
-                    grid.reset();
-                }
-
-                function delRuleClicked(e) {
-                    if (grid.colors.length <= 2)
-                        return;
-                    var row = e.target;
-                    while (row.tagName.toLowerCase() != "tr")
-                        row = row.parentNode;
-                    var rows = row.parentNode.rows;
-                    for (var i=0; i<rows.length; i++)
-                        if (rows[i] === row)
-                            break;
-                    if (i >= rows.length)
-                        return;
-                    grid.stop();
-                    grid.removeColor(i);
-                    initRules();
-                }
-
-                function addRuleRow(color, rule) {
-                    var row = rulerow.cloneNode(true);
-                    rulebody.appendChild(row);
-                    row.getElementsByClassName("swatch")[0].style.backgroundColor = color;
-                    var select = row.getElementsByTagName('select')[0];
-                    select.value = rule;
-                    select.addEventListener('change', updateRules);
-                    var rule_del = row.getElementsByClassName("rule_del")[0];
-                    rule_del.addEventListener("click", delRuleClicked);
-                }
-
-                function initRules() {
-                    while (rulebody.childNodes.length)
-                        rulebody.removeChild(rulebody.firstChild);
-                    for (var i=0; i<ant.turns.length; i++)
-                        addRuleRow(grid.colors[i],
-                            Ants.Ant.Turn2Name(ant.turns[i]));
-                    var disabled = grid.colors.length <= 2;
-                    var buttons = rules.getElementsByClassName("rule_del");
-                    for (var i=0; i<buttons.length; i++)
-                        buttons[i].disabled = disabled;
-                }
-                initRules();
-
-                rules.getElementsByClassName("rule_add")[0].addEventListener("click", function() {
-                    grid.stop();
-                    grid.addColor();
-                    initRules();
-                });
+                new Ants.RulesEditor(grid, grid.ants[0],
+                    document.getElementById('rules'));
             })();
         </script>
     </body>
