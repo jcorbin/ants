@@ -32,6 +32,8 @@ Ants.Ant = (function() {
             this.initial_state = null;
     }
 
+    Ant.prototype = new EventDispatcher();
+
     Ant.TurnLeft = Left;
     Ant.TurnRight = Right;
 
@@ -81,9 +83,11 @@ Ants.Ant = (function() {
                 else
                     while (ant.turns.length < d.length)
                         ant.turns.push(Ant.TurnLeft);
+                ant.dispatch("turnsChanged");
             }.bind(this));
         }
         this.turns = d;
+        this.dispatch("turnsChanged");
         if (this.grid)
             this.grid.reset();
     };

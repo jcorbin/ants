@@ -52,6 +52,7 @@ Ants.Grid = (function() {
         this.colors = this.generateColors(this.colors.length-1);
         this.ants.forEach(function(ant) {
             ant.turns.splice(index, 1);
+            ant.dispatch("turnsChanged");
         });
         this.reset();
     };
@@ -62,6 +63,7 @@ Ants.Grid = (function() {
         this.ants.forEach(function(ant) {
             while (ant.turns.length < ncolors)
                 ant.turns.push(Ants.Ant.TurnLeft);
+            ant.dispatch("turnsChanged");
         });
         this.reset();
     };
