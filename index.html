@@ -10,23 +10,31 @@
         <script src="ruleseditor.js" language="JavaScript"></script>
     </head>
     <body>
-        <div id="container">
-            <canvas id="grid"></canvas>
+        <div id="controls">
             <button id="reset">Reset</button>
             <button id="run_ctl">Play</button>
             <button id="slower">Slower</button>
             <button id="faster">Faster</button>
-            <div style="float: left">
-                <label for="iteration">Iteration:</label>
-                <input id="iteration" type="text" size="6" />
-            </div>
-            <div style="float: left">
-                <label for="rules">Rules:</label>
-                <input id="rules" type="text" size="3" />
-            </div>
+            <span class="sep">&nbsp;</span>
+            <label for="iteration">Iteration:</label>
+            <input id="iteration" type="text" size="6" />
+            <span class="sep">&nbsp;</span>
+            <label for="rules">Rules:</label>
+            <input id="rules" type="text" size="3" />
+        </div>
+        <div id="container">
+            <canvas id="grid"></canvas>
         </div>
         <script language="JavaScript">
             (function () {
+                function updateGeometry() {
+                    var ctl = document.getElementById("controls");
+                    var cont = document.getElementById("container");
+                    ctl.style.left = Math.floor(ctl.parentNode.clientWidth/2 - (ctl.offsetWidth/2))+"px";
+                }
+                window.addEventListener("resize", updateGeometry);
+                updateGeometry();
+
                 var grid = document.getElementById('grid');
                 grid = new Ants.Grid(
                     grid, // canvas

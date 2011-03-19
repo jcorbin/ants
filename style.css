@@ -7,16 +7,33 @@ html, body {
     height: 99%;
 }
 
-#grid {
-    float: right;
+#controls {
+    position: absolute;
+    z-index: 2;
+    top: 5px;
+    left: 5px;
+    padding: 1px;
+    background-color: rgba(192, 192, 192, 0.5);
+    text-align: center;
+}
+
+table.rules select,
+table.rules button,
+#controls button, #controls input {
+    background-color: rgba(192, 192, 192, 0.75);
+    border: 1px solid rgba(64, 64, 64, 0.5);
+}
+
+table.rules {
+    background-color: rgba(192, 192, 192, 0.5);
 }
 
 #container {
     text-align: center;
-    margin: 1%;
-    height: 99%;
-}
-
-#container button {
-    float: left;
+    position: absolute;
+    z-index: 1;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
 }
