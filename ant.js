@@ -73,6 +73,15 @@ Ants.Ant = (function() {
         }
         if (this.grid && this.grid.colors.length != d.length) {
             this.grid.colors = this.grid.generateColors(d.length);
+            this.grid.ants.forEach(function(ant) {
+                if (ant === this)
+                    return;
+                if (ant.turns.length > d.length)
+                    ant.turns.splice(d.length-1);
+                else
+                    while (ant.turns.length < d.length)
+                        ant.turns.push(Ant.TurnLeft);
+            }.bind(this));
         }
         this.turns = d;
         if (this.grid)
