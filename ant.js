@@ -71,7 +71,12 @@ Ants.Ant = (function() {
             else
                 throw Error('Invalid turn direction');
         }
+        if (this.grid && this.grid.colors.length != d.length) {
+            this.grid.colors = this.grid.generateColors(d.length);
+        }
         this.turns = d;
+        if (this.grid)
+            this.grid.reset();
     };
 
     Ant.prototype._saveInitialState = function() {
