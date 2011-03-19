@@ -60,7 +60,7 @@ var Expander = (function() {
 
     Expander.prototype = new EventDispatcher();
 
-    Expander.prototype.updateGeometry = function() {
+    Expander.prototype.refresh = function() {
         var anch = elementBox(this.anchor);
         var view = viewBox(this.element.ownerDocument.defaultView);
         if (this.element.offsetHeight <= view[3] - anch[3])
@@ -80,10 +80,10 @@ var Expander = (function() {
             clearTimeout(this.collapseDelay);
             delete this.collapseDelay;
         }
-        this.updateGeometry();
+        this.refresh();
         this.element.style.visibility = "visible";
         if (! this._onviewresize) {
-            this._onviewresize = this.updateGeometry.bind(this);
+            this._onviewresize = this.refresh.bind(this);
             this.element.ownerDocument.defaultView.addEventListener("resize", this._onviewresize);
         }
     };
