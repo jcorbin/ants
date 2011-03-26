@@ -1,13 +1,14 @@
 html, body {
     margin: 0;
     padding: 0;
-    background-color: #888;
-    color: #111;
+    background-color: #111;
+    color: #999;
     font-family: sans-serif;
     height: 99%;
 }
 
 #controls {
+    color: #222;
     position: absolute;
     z-index: 2;
     top: 5px;
@@ -20,11 +21,13 @@ html, body {
 table.rules select,
 table.rules button,
 #controls button, #controls input {
+    color: #222;
     background-color: rgba(192, 192, 192, 0.75);
     border: 1px solid rgba(64, 64, 64, 0.5);
 }
 
 table.rules {
+    color: #222;
     background-color: rgba(192, 192, 192, 0.5);
 }
 
