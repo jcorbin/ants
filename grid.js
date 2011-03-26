@@ -37,16 +37,22 @@ Ants.Grid = (function() {
         this.runSteps = 1;
     }
 
+    Grid.HueWheelGenerator = function(s, l) {
+        s = (s * 100).toFixed(1) + '%';
+        l = (l * 100).toFixed(1) + '%';
+        return function(ncolors) {
+            var colors = [];
+            for (var i=0; i<ncolors; i++)
+                colors.push("hsl("+[
+                    Math.floor(360*i/ncolors).toString(), s, l
+                ].join(", ")+")");
+            return colors;
+        };
+    };
+
     Grid.prototype = new EventDispatcher();
 
-    Grid.prototype.generateColors = function(ncolors) {
-        var colors = [];
-        for (var i=0; i<ncolors; i++)
-            colors.push("hsl("
-                +Math.floor(360*i/ncolors).toString()
-                +", 75%, 40%)")
-        return colors;
-    };
+    Grid.prototype.generateColors = Grid.HueWheelGenerator(0.75, 0.4);
 
     Grid.prototype.removeColor = function(index) {
         this.colors = this.generateColors(this.colors.length-1);
