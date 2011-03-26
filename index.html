@@ -39,7 +39,8 @@
                 grid = new Ants.Grid(
                     grid, // canvas
                     10,   // rows
-                    10    // cols
+                    10,   // cols
+                    Ants.Grid.HueWheelGenerator(0.5, 0.3)
                 );
 
                 var ant = new Ants.Ant(
