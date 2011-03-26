@@ -56,6 +56,12 @@ Ants.Grid = (function() {
 
     Grid.prototype.colorGenerator = Grid.HueWheelGenerator(0.75, 0.4);
 
+    Grid.prototype.setColorGenerator = function(generator) {
+        this.colorGenerator = generator;
+        this.colors = this.colorGenerator(this.colors.length);
+        this.render();
+    };
+
     Grid.prototype.removeColor = function(index) {
         this.colors = this.colorGenerator(this.colors.length-1);
         this.ants.forEach(function(ant) {
