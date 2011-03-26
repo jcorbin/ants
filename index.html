@@ -17,7 +17,7 @@
             <button id="faster">Faster</button>
             <span class="sep">&nbsp;</span>
             <label for="iteration">Iteration:</label>
-            <input id="iteration" type="text" size="6" />
+            <input id="iteration" type="text" size="1" />
             <span class="sep">&nbsp;</span>
             <label for="rules">Rules:</label>
             <input id="rules" type="text" size="3" />
@@ -63,7 +63,11 @@
                 var iteration = document.getElementById('iteration');
                 function updateIteration() {
                     iteration.value = grid.iteration.toString();
+                    iteration.size = iteration.value.length;
                 }
+                iteration.addEventListener('keypress', function() {
+                    this.size = Math.max(1, this.value.length);
+                });
                 iteration.addEventListener('change', function() {
                     var i = parseInt(iteration.value);
                     if (isNaN(i) || i < grid.iteration)
