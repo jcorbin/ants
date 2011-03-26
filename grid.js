@@ -222,8 +222,8 @@ Ants.Grid = (function() {
         }
 
         this.scale = Math.min(
-            this.canvas.parentElement.clientWidth/this.cols,
-            this.canvas.parentElement.clientHeight/this.rows
+            this.canvas.parentNode.clientWidth/this.cols,
+            this.canvas.parentNode.clientHeight/this.rows
         );
 
         this.canvas.width = this.cols * this.scale;
