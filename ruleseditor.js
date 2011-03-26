@@ -8,7 +8,7 @@ Ants.RulesEditor = (function() {
         this.input = input;
         this.input.addEventListener("keypress", function() {
             this.size = Math.max(1, this.value.length);
-        });
+        }, false);
         this.input.addEventListener("change", function() {
             try {
                 this.ant.setTurnString(this.input.value);
@@ -16,7 +16,7 @@ Ants.RulesEditor = (function() {
                 this.input.value = this.ant.getTurnString();
             }
             this.refresh();
-        }.bind(this));
+        }.bind(this), false);
         var updateInput = function() {
             var s = this.ant.getTurnString();
             this.input.value = s;
@@ -45,7 +45,7 @@ Ants.RulesEditor = (function() {
         cell.colSpan = 2;
         var el = row.insertCell(-1).appendChild(doc.createElement("button"));
         el.appendChild(doc.createTextNode("+"));
-        el.addEventListener("click", this.onAddRuleClicked.bind(this));
+        el.addEventListener("click", this.onAddRuleClicked.bind(this), false);
 
         this.table.appendChild(doc.createElement("tbody"));
 
@@ -53,7 +53,7 @@ Ants.RulesEditor = (function() {
 
         Expander.apply(this, [this.input, this.table]);
 
-        this.input.addEventListener("focus", this.expand.bind(this));
+        this.input.addEventListener("focus", this.expand.bind(this), false);
     }
 
     Editor.prototype = new Expander();
@@ -75,13 +75,13 @@ Ants.RulesEditor = (function() {
         option = select.appendChild(doc.createElement("option"));
         option.appendChild(doc.createTextNode("Right"));
         select.value = rule;
-        select.addEventListener('change', this.update.bind(this));
+        select.addEventListener('change', this.update.bind(this), false);
 
         cell = row.insertCell(-1);
         var button = cell.appendChild(doc.createElement("button"));
         button.className = "rule_del";
         button.appendChild(doc.createTextNode("-"));
-        button.addEventListener("click", this.onDelRuleClicked.bind(this));
+        button.addEventListener("click", this.onDelRuleClicked.bind(this), false);
     };
 
     Editor.prototype.update = function() {

@@ -91,11 +91,11 @@ var Expander = (function() {
         var view = this.element.ownerDocument.defaultView;
         if (! this._onviewresize) {
             this._onviewresize = this.refresh.bind(this);
-            view.addEventListener("resize", this._onviewresize);
+            view.addEventListener("resize", this._onviewresize, false);
         }
         if (! this._onviewclick) {
             this._onviewclick = this.onViewClick.bind(this);
-            view.addEventListener("click", this._onviewclick);
+            view.addEventListener("click", this._onviewclick, false);
         }
     };
 

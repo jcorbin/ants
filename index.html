@@ -32,7 +32,7 @@
                     var cont = document.getElementById("container");
                     ctl.style.left = Math.floor(ctl.parentNode.clientWidth/2 - (ctl.offsetWidth/2))+"px";
                 }
-                window.addEventListener("resize", updateGeometry);
+                window.addEventListener("resize", updateGeometry, false);
                 updateGeometry();
 
                 var grid = document.getElementById('grid');
@@ -53,13 +53,13 @@
                 grid.addAnt(ant);
 
                 document.getElementById('reset').addEventListener('click',
-                    grid.reset.bind(grid));
+                    grid.reset.bind(grid), false);
 
                 document.getElementById('slower').addEventListener('click',
-                    function() {grid.runSlower(2)});
+                    function() {grid.runSlower(2)}, false);
 
                 document.getElementById('faster').addEventListener('click',
-                    function() {grid.runFaster(2)});
+                    function() {grid.runFaster(2)}, false);
 
                 var iteration = document.getElementById('iteration');
                 function updateIteration() {
@@ -68,14 +68,14 @@
                 }
                 iteration.addEventListener('keypress', function() {
                     this.size = Math.max(1, this.value.length);
-                });
+                }, false);
                 iteration.addEventListener('change', function() {
                     var i = parseInt(iteration.value);
                     if (isNaN(i) || i < grid.iteration)
                         updateIteration();
                     else
                         grid.setIteration(i);
-                });
+                }, false);
                 grid.addListener("reset", updateIteration);
                 grid.addListener("step", updateIteration);
                 updateIteration();
@@ -90,7 +90,7 @@
                     runctl.innerText = 'Play';
                 });
 
-                window.addEventListener("error", grid.stop.bind(grid));
+                window.addEventListener("error", grid.stop.bind(grid), false);
 
                 var runctl = document.getElementById('run_ctl');
                 runctl.addEventListener('click', function() {
@@ -98,7 +98,7 @@
                         grid.play();
                     else
                         grid.stop();
-                });
+                }, false);
 
                 new Ants.RulesEditor(grid, grid.ants[0],
                     document.getElementById('rules'));

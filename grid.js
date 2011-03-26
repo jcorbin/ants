@@ -31,7 +31,7 @@ Ants.Grid = (function() {
         this.initial_state = [this.rows, this.cols];
         this.frozen = false;
         this.needsSizeUpdate = false;
-        window.addEventListener('resize', this.updateSize.bind(this));
+        window.addEventListener('resize', this.updateSize.bind(this), false);
         this.reset();
 
         this.running = null;
