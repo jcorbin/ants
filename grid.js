@@ -21,7 +21,7 @@ Ants.Grid = (function() {
     }
 
     function Grid(canvas, rows, cols, colors) {
-        this.colors = colors || this.generateColors(2);
+        this.colors = colors || this.colorGenerator(2);
         this.canvas = canvas;
         this.ants = [];
         this.rows = rows || DefaultRows;
@@ -52,10 +52,10 @@ Ants.Grid = (function() {
 
     Grid.prototype = new EventDispatcher();
 
-    Grid.prototype.generateColors = Grid.HueWheelGenerator(0.75, 0.4);
+    Grid.prototype.colorGenerator = Grid.HueWheelGenerator(0.75, 0.4);
 
     Grid.prototype.removeColor = function(index) {
-        this.colors = this.generateColors(this.colors.length-1);
+        this.colors = this.colorGenerator(this.colors.length-1);
         this.ants.forEach(function(ant) {
             ant.turns.splice(index, 1);
             ant.dispatch("turnsChanged");
@@ -65,7 +65,7 @@ Ants.Grid = (function() {
 
     Grid.prototype.addColor = function(index) {
         var ncolors = this.colors.length+1;
-        this.colors = this.generateColors(ncolors);
+        this.colors = this.colorGenerator(ncolors);
         this.ants.forEach(function(ant) {
             while (ant.turns.length < ncolors)
                 ant.turns.push(Ants.Ant.TurnLeft);
