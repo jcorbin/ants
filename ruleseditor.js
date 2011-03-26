@@ -6,6 +6,9 @@ Ants.RulesEditor = (function() {
         this.grid = grid;
         this.ant = ant;
         this.input = input;
+        this.input.addEventListener("keypress", function() {
+            this.size = Math.max(1, this.value.length);
+        });
         this.input.addEventListener("change", function() {
             try {
                 this.ant.setTurnString(this.input.value);
