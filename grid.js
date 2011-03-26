@@ -20,8 +20,8 @@ Ants.Grid = (function() {
         return wrapped;
     }
 
-    function Grid(canvas, rows, cols, colors) {
-        this.colors = colors || this.colorGenerator(2);
+    function Grid(canvas, rows, cols) {
+        this.colors = this.colorGenerator(2);
         this.canvas = canvas;
         this.ants = [];
         this.rows = rows || DefaultRows;
