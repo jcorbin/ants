@@ -1,0 +1,3 @@
+A canvas-based html5 simulator for Langton's Ants.
+
+Works in Chrome, Firefox has issues.
