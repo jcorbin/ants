@@ -7,6 +7,14 @@ html, body {
     height: 99%;
 }
 
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 #controls {
     color: #222;
     position: absolute;
@@ -16,6 +24,15 @@ html, body {
     padding: 1px;
     background-color: rgba(192, 192, 192, 0.5);
     text-align: center;
+}
+
+#controls a {
+    color: #336;
+    font-weight: bold;
+}
+
+#controls a:hover {
+    color: #558;
 }
 
 table.rules select,
