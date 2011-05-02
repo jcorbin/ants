@@ -31,7 +31,7 @@ Ants.RulesEditor = (function() {
         this.table.style.display = "none";
         this.table.style.position = "absolute";
 
-        var row = this.table.createTHead().insertRow();
+        var row = this.table.createTHead().insertRow(-1);
         row.appendChild(doc.createElement("th"))
             .appendChild(doc.createTextNode("On color"));
         row.appendChild(doc.createElement("th"))
@@ -39,7 +39,7 @@ Ants.RulesEditor = (function() {
         row.appendChild(doc.createElement("th"))
             .appendChild(doc.createTextNode(" "));
 
-        row = this.table.createTFoot().insertRow();
+        row = this.table.createTFoot().insertRow(-1);
         var cell = row.insertCell(-1);
         cell.appendChild(doc.createTextNode(" "));
         cell.colSpan = 2;
