@@ -82,6 +82,22 @@ Ants.Grid = (function() {
         this.reset();
     };
 
+    Grid.prototype.setNumColors = function(n) {
+        if (this.colors.length == n) return;
+        this.colors = this.colorGenerator(n);
+        this.ants.forEach(function(ant) {
+            if (ant.turns.length == n)
+                return;
+            if (ant.turns.length > n)
+                ant.turns.splice(n-1);
+            else
+                while (ant.turns.length < n)
+                    ant.turns.push(Ants.Ant.TurnLeft);
+            ant.dispatch("turnsChanged");
+        });
+        this.reset();
+    };
+
     Grid.prototype.runStep = function() {
         this.step(this.runSteps);
     };

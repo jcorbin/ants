@@ -73,23 +73,14 @@ Ants.Ant = (function() {
             else
                 throw Error('Invalid turn direction');
         }
-        if (this.grid && this.grid.colors.length != d.length) {
-            this.grid.colors = this.grid.colorGenerator(d.length);
-            this.grid.ants.forEach(function(ant) {
-                if (ant === this)
-                    return;
-                if (ant.turns.length > d.length)
-                    ant.turns.splice(d.length-1);
-                else
-                    while (ant.turns.length < d.length)
-                        ant.turns.push(Ant.TurnLeft);
-                ant.dispatch("turnsChanged");
-            }.bind(this));
-        }
         this.turns = d;
         this.dispatch("turnsChanged");
-        if (this.grid)
-            this.grid.reset();
+        if (this.grid) {
+            if (this.grid.length == d.length)
+                this.grid.reset();
+            else
+                this.grid.setNumColors(d.length);
+        }
     };
 
     Ant.prototype._saveInitialState = function() {
