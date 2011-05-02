@@ -1,5 +1,5 @@
 A canvas-based html5 simulator for Langton's Ants.
 
-Works in Chrome, Firefox has issues.
+Works for me in Chrome, FireFox 4, and IE 9.
 
 Demo on the "homepage":http://jcorbin.github.com/ants .
