@@ -62,8 +62,10 @@ Ants.Ant = (function() {
     };
 
     Ant.prototype.setTurnString = function(s) {
-        var d = [];
         s = s.toLowerCase();
+        if (this.turns && s == this.getTurnString().toLowerCase())
+            return;
+        var d = [];
         for (var i=0; i<s.length; i++) {
             var c = s[i];
             if (c == 'r')
