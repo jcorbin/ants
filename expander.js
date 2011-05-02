@@ -104,11 +104,11 @@ var Expander = (function() {
 
         var view = this.element.ownerDocument.defaultView;
         if (this._onviewresize) {
-            view.removeEventListener("resize", this._onviewresize);
+            view.removeEventListener("resize", this._onviewresize, false);
             delete this._onviewresize;
         }
         if (! this._onviewclick) {
-            view.removeEventListener("click", this._onviewclick);
+            view.removeEventListener("click", this._onviewclick, false);
             delete this._onviewclick;
         }
     };
