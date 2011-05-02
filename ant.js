@@ -74,7 +74,7 @@ Ants.Ant = (function() {
                 throw Error('Invalid turn direction');
         }
         if (this.grid && this.grid.colors.length != d.length) {
-            this.grid.colors = this.grid.generateColors(d.length);
+            this.grid.colors = this.grid.colorGenerator(d.length);
             this.grid.ants.forEach(function(ant) {
                 if (ant === this)
                     return;
