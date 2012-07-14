@@ -1,3 +1,11 @@
+grid = document.getElementById 'grid'
+reset = document.getElementById 'reset'
+slower = document.getElementById 'slower'
+faster = document.getElementById 'faster'
+iteration = document.getElementById 'iteration'
+runctl = document.getElementById 'run_ctl'
+rules = document.getElementById 'rules'
+
 updateGeometry = ->
   ctl = document.getElementById "controls"
   cont = document.getElementById "container"
@@ -7,7 +15,7 @@ window.addEventListener "resize", updateGeometry, false
 updateGeometry()
 
 grid = new Ants.Grid(
-  document.getElementById('grid'), # canvas
+  grid, # canvas
   10, # rows
   10, # cols
   Ants.Grid.HueWheelGenerator(0.5, 0.3))
@@ -20,16 +28,11 @@ grid.addAnt new Ants.Ant(
     "RL"                    # turns
 )
 
-document.getElementById('reset')
-  .addEventListener 'click', grid.reset.bind(grid), false
+reset.addEventListener 'click', grid.reset.bind(grid), false
 
-document.getElementById('slower')
-  .addEventListener 'click', (-> grid.runSlower(2)), false
+slower.addEventListener 'click', (-> grid.runSlower(2)), false
 
-document.getElementById('faster')
-  .addEventListener 'click', (-> grid.runFaster(2)), false
-
-iteration = document.getElementById('iteration')
+faster.addEventListener 'click', (-> grid.runFaster(2)), false
 
 updateIteration = ->
   iteration.value = grid.iteration.toString()
@@ -61,7 +64,6 @@ grid.addListener "stop", ->
 
 window.addEventListener "error", grid.stop.bind(grid), false
 
-runctl = document.getElementById 'run_ctl'
 runctl.addEventListener 'click', (->
   if grid.running == null
     grid.play()
@@ -69,4 +71,4 @@ runctl.addEventListener 'click', (->
     grid.stop()
 ), false
 
-new Ants.RulesEditor grid, grid.ants[0], document.getElementById('rules')
+new Ants.RulesEditor grid, grid.ants[0], rules
