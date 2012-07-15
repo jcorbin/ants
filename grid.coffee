@@ -55,7 +55,7 @@ class root.Ants.Grid extends root.EventDispatcher
 
   removeColor: (index) ->
     @colors = @colorGenerator @colors.length-1
-    @newCellValue -= 1
+    @newCellValue += 1
     for ant in @ants
       ant.turns.splice index, 1
       ant.dispatch 'turnsChanged'
@@ -64,7 +64,7 @@ class root.Ants.Grid extends root.EventDispatcher
   addColor: (index) ->
     ncolors = @colors.length+1
     @colors = @colorGenerator ncolors
-    @newCellValue += 1
+    @newCellValue -= 1
     for ant in @ants
       while ant.turns.length < ncolors
         ant.turns.push root.Ants.Ant.TurnLeft
