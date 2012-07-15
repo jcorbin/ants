@@ -1,4 +1,6 @@
-class EventDispatcher
+root = exports ? this
+
+class root.EventDispatcher
   callbacks: {}
 
   addListener: (name, callback) ->
