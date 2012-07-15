@@ -25,6 +25,7 @@ class root.Ants.Grid extends root.EventDispatcher
   constructor: (@canvas, rows, cols, colorGenerator) ->
     @colorGenerator = colorGenerator if colorGenerator?
     @colors = @colorGenerator(2)
+    @newCellValue = 0
     @rows = rows if rows?
     @cols = cols if cols?
     @ants = []
@@ -114,7 +115,7 @@ class root.Ants.Grid extends root.EventDispatcher
   reset: @frozenMethod ->
     @rows = @initial_state[0]
     @cols = @initial_state[1]
-    @data = (0 for j in [1..@cols] for i in [1..@rows])
+    @data = (@newCellValue for j in [1..@cols] for i in [1..@rows])
     @iteration = 0
     ant.reset() for ant in @ants
     @updateSize()
@@ -137,26 +138,26 @@ class root.Ants.Grid extends root.EventDispatcher
 
   resizeBy: (leftof, rightof, above, below) ->
     if leftof > 0
-      row.unshift(0) for j in [1..leftof] for row in @data
+      row.unshift(@newCellValue) for j in [1..leftof] for row in @data
 
     else if leftof < 0
       row.shift() for j in [1..leftof] for row in @data
     @cols += leftof
 
     if rightof > 0
-      row.push(0) for j in [1..rightof] for row in @data
+      row.push(@newCellValue) for j in [1..rightof] for row in @data
     else if rightof < 0
       row.pop() for j in [1..rightof] for row in @data
     @cols += rightof
 
     if above > 0
-      @data.unshift (0 for j in [1..@cols]) for i in [1..above]
+      @data.unshift (@newCellValue for j in [1..@cols]) for i in [1..above]
     else if above < 0
       @data.shift() for i in [above..-1]
     @rows += above
 
     if below > 0
-      @data.push (0 for j in [1..@cols]) for i in [1..below]
+      @data.push (@newCellValue for j in [1..@cols]) for i in [1..below]
     else if below < 0
       @data.pop() for i in [below..-1]
     @rows += below
