@@ -72,4 +72,7 @@ do ->
       grid.stop()
   ), false
 
-  new Ants.RulesEditor grid, grid.ants[0], rules
+  editor = new Ants.RulesEditor grid, grid.ants[0], rules
+
+  grid: grid
+  ruleseditor: editor
