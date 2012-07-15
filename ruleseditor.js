@@ -128,6 +128,7 @@ Ants.RulesEditor = (function() {
         this.grid.stop();
         this.grid.removeColor(i);
         this.refresh();
+        e.stopPropagation();
     };
 
     Editor.prototype.onAddRuleClicked = function() {
