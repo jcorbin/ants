@@ -207,10 +207,6 @@ class root.Ants.Grid extends root.EventDispatcher
   render: ->
     ctx = @canvas.getContext '2d'
 
-    # Flood fill color 0
-    ctx.fillStyle = @colors[0]
-    ctx.fillRect 0, 0, @cols, @rows
-
     # TODO d es it pay to aggregate draws by fill color?
     for row, i in @data
       for cell, j in row
