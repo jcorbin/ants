@@ -76,13 +76,13 @@ class root.Ants.Grid extends root.EventDispatcher
     @newCellValue = -n
     @colors = @colorGenerator n
     for ant in @ants
-      return if ant.turns.length == n
-      if ant.turns.length > n
-        ant.turns.splice n-1
-      else
-        while ant.turns.length < n
-          ant.turns.push root.Ants.Ant.TurnLeft
-      ant.dispatch 'turnsChanged'
+      if ant.turns.length != n
+        if ant.turns.length > n
+          ant.turns.splice n-1
+        else
+          while ant.turns.length < n
+            ant.turns.push root.Ants.Ant.TurnLeft
+        ant.dispatch 'turnsChanged'
     @reset()
 
   runStep: ->
