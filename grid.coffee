@@ -210,7 +210,7 @@ class root.Ants.Grid extends root.EventDispatcher
     # TODO d es it pay to aggregate draws by fill color?
     for row, i in @data
       for cell, j in row
-        @drawCell(i, j) if cell != 0
+        @drawCell(i, j) if cell >= 0
 
     ant.draw() for ant in @ants
 
