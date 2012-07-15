@@ -233,6 +233,8 @@ class root.Ants.Grid extends root.EventDispatcher
     return if @frozen
 
     color = @getCell row, col
+    color = @data.get [row, col]
+    return if color < 0
     color = @colors[color]
 
     ctx = @canvas.getContext '2d'
@@ -243,8 +245,7 @@ class root.Ants.Grid extends root.EventDispatcher
     ctx = @canvas.getContext '2d'
 
     # TODO d es it pay to aggregate draws by fill color?
-    @data.each (pos, val) =>
-      @drawCell pos... if val >= 0
+    @data.each (pos, val) => @drawCell pos...
 
     ant.draw() for ant in @ants
 
