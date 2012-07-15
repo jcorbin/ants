@@ -25,7 +25,7 @@ class root.Ants.Grid extends root.EventDispatcher
   constructor: (@canvas, rows, cols, colorGenerator) ->
     @colorGenerator = colorGenerator if colorGenerator?
     @colors = @colorGenerator(2)
-    @newCellValue = 0
+    @newCellValue = -2
     @rows = rows if rows?
     @cols = cols if cols?
     @ants = []
@@ -55,6 +55,7 @@ class root.Ants.Grid extends root.EventDispatcher
 
   removeColor: (index) ->
     @colors = @colorGenerator @colors.length-1
+    @newCellValue -= 1
     for ant in @ants
       ant.turns.splice index, 1
       ant.dispatch 'turnsChanged'
@@ -63,6 +64,7 @@ class root.Ants.Grid extends root.EventDispatcher
   addColor: (index) ->
     ncolors = @colors.length+1
     @colors = @colorGenerator ncolors
+    @newCellValue += 1
     for ant in @ants
       while ant.turns.length < ncolors
         ant.turns.push root.Ants.Ant.TurnLeft
@@ -71,6 +73,7 @@ class root.Ants.Grid extends root.EventDispatcher
 
   setNumColors: (n) ->
     return if @colors.length == n
+    @newCellValue = -n
     @colors = @colorGenerator n
     for ant in @ants
       return if ant.turns.length == n
