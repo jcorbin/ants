@@ -107,7 +107,7 @@ var Expander = (function() {
             view.removeEventListener("resize", this._onviewresize, false);
             delete this._onviewresize;
         }
-        if (! this._onviewclick) {
+        if (this._onviewclick) {
             view.removeEventListener("click", this._onviewclick, false);
             delete this._onviewclick;
         }
