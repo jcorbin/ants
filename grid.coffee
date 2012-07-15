@@ -37,6 +37,14 @@ class root.Ants.Grid extends root.EventDispatcher
     @runSteps = 1
     window.addEventListener 'resize', @updateSize.bind(this), false
 
+  getCell: (x, y) ->
+    @data[x][y]
+
+  setCell: (x, y, v) ->
+    if @data[x][y] != v
+      @data[x][y] = v
+      @drawCell x, y
+
   setColorGenerator: (generator) ->
     @colorGenerator = generator
     @colors = @colorGenerator @colors.length
