@@ -209,7 +209,7 @@ Ants.Grid = (function() {
             for (var i=0; i<above; i++)
                 this.data.unshift(newRow());
         else if (above < 0)
-            for (var i=0; i<above; i++)
+            for (var i=above; i<0; i++)
                 this.data.shift();
         this.rows += above;
 
@@ -217,7 +217,7 @@ Ants.Grid = (function() {
             for (var i=0; i<below; i++)
                 this.data.push(newRow());
         else if (below < 0)
-            for (var i=0; i<below; i++)
+            for (var i=below; i<0; i++)
                 this.data.pop();
         this.rows += below;
 
