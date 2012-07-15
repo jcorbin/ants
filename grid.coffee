@@ -231,8 +231,12 @@ class root.Ants.Grid extends root.EventDispatcher
 
   drawCell: (row, col) ->
     return if @frozen
+
+    color = @getCell row, col
+    color = @colors[color]
+
     ctx = @canvas.getContext '2d'
-    ctx.fillStyle = @colors[@getCell row, col]
+    ctx.fillStyle = color
     ctx.fillRect col, row, 1, 1
 
   render: ->
