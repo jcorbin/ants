@@ -88,9 +88,8 @@ class root.Ants.Ant extends root.EventDispatcher
 
   step: ->
     # Update current cell
-    c = @grid.data[@row][@col]
-    @grid.data[@row][@col] = (c + 1) % @grid.colors.length
-    @grid.drawCell @row, @col
+    c = @grid.getCell @row, @col
+    @grid.setCell @row, @col, (c + 1) % @grid.colors.length
 
     # Turn
     @heading = (switch @turns[c]

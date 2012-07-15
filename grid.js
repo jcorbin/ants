@@ -54,6 +54,7 @@
         this.colorGenerator = colorGenerator;
       }
       this.colors = this.colorGenerator(2);
+      this.newCellValue = -2;
       if (rows != null) {
         this.rows = rows;
       }
@@ -71,6 +72,22 @@
       window.addEventListener('resize', this.updateSize.bind(this), false);
     }
 
+    Grid.prototype.getCell = function(x, y) {
+      var v;
+      v = this.data[x][y];
+      while (v < 0) {
+        v += this.colors.length;
+      }
+      return v;
+    };
+
+    Grid.prototype.setCell = function(x, y, v) {
+      if (this.data[x][y] !== v) {
+        this.data[x][y] = v;
+        return this.drawCell(x, y);
+      }
+    };
+
     Grid.prototype.setColorGenerator = function(generator) {
       this.colorGenerator = generator;
       this.colors = this.colorGenerator(this.colors.length);
@@ -80,6 +97,7 @@
     Grid.prototype.removeColor = function(index) {
       var ant, _i, _len, _ref1;
       this.colors = this.colorGenerator(this.colors.length - 1);
+      this.newCellValue -= 1;
       _ref1 = this.ants;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         ant = _ref1[_i];
@@ -93,6 +111,7 @@
       var ant, ncolors, _i, _len, _ref1;
       ncolors = this.colors.length + 1;
       this.colors = this.colorGenerator(ncolors);
+      this.newCellValue += 1;
       _ref1 = this.ants;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         ant = _ref1[_i];
@@ -109,6 +128,7 @@
       if (this.colors.length === n) {
         return;
       }
+      this.newCellValue = -n;
       this.colors = this.colorGenerator(n);
       _ref1 = this.ants;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
@@ -185,7 +205,7 @@
             var _j, _ref2, _results1;
             _results1 = [];
             for (j = _j = 1, _ref2 = this.cols; 1 <= _ref2 ? _j <= _ref2 : _j >= _ref2; j = 1 <= _ref2 ? ++_j : --_j) {
-              _results1.push(0);
+              _results1.push(this.newCellValue);
             }
             return _results1;
           }).call(this));
@@ -220,7 +240,7 @@
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           row = _ref1[_i];
           for (j = _j = 1; 1 <= leftof ? _j <= leftof : _j >= leftof; j = 1 <= leftof ? ++_j : --_j) {
-            row.unshift(0);
+            row.unshift(this.newCellValue);
           }
         }
       } else if (leftof < 0) {
@@ -238,7 +258,7 @@
         for (_m = 0, _len2 = _ref3.length; _m < _len2; _m++) {
           row = _ref3[_m];
           for (j = _n = 1; 1 <= rightof ? _n <= rightof : _n >= rightof; j = 1 <= rightof ? ++_n : --_n) {
-            row.push(0);
+            row.push(this.newCellValue);
           }
         }
       } else if (rightof < 0) {
@@ -257,7 +277,7 @@
             var _r, _ref5, _results;
             _results = [];
             for (j = _r = 1, _ref5 = this.cols; 1 <= _ref5 ? _r <= _ref5 : _r >= _ref5; j = 1 <= _ref5 ? ++_r : --_r) {
-              _results.push(0);
+              _results.push(this.newCellValue);
             }
             return _results;
           }).call(this));
@@ -274,7 +294,7 @@
             var _ref5, _results, _t;
             _results = [];
             for (j = _t = 1, _ref5 = this.cols; 1 <= _ref5 ? _t <= _ref5 : _t >= _ref5; j = 1 <= _ref5 ? ++_t : --_t) {
-              _results.push(0);
+              _results.push(this.newCellValue);
             }
             return _results;
           }).call(this));
@@ -337,21 +357,19 @@
         return;
       }
       ctx = this.canvas.getContext('2d');
-      ctx.fillStyle = this.colors[this.data[row][col]];
+      ctx.fillStyle = this.colors[this.getCell(row, col)];
       return ctx.fillRect(col, row, 1, 1);
     };
 
     Grid.prototype.render = function() {
       var ant, cell, ctx, i, j, row, _i, _j, _k, _len, _len1, _len2, _ref1, _ref2, _results;
       ctx = this.canvas.getContext('2d');
-      ctx.fillStyle = this.colors[0];
-      ctx.fillRect(0, 0, this.cols, this.rows);
       _ref1 = this.data;
       for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
         row = _ref1[i];
         for (j = _j = 0, _len1 = row.length; _j < _len1; j = ++_j) {
           cell = row[j];
-          if (cell !== 0) {
+          if (cell >= 0) {
             this.drawCell(i, j);
           }
         }

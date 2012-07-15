@@ -166,9 +166,8 @@
 
     Ant.prototype.step = function() {
       var above, below, c, leftof, rightof;
-      c = this.grid.data[this.row][this.col];
-      this.grid.data[this.row][this.col] = (c + 1) % this.grid.colors.length;
-      this.grid.drawCell(this.row, this.col);
+      c = this.grid.getCell(this.row, this.col);
+      this.grid.setCell(this.row, this.col, (c + 1) % this.grid.colors.length);
       this.heading = ((function() {
         switch (this.turns[c]) {
           case Right:

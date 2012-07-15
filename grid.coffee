@@ -25,6 +25,7 @@ class root.Ants.Grid extends root.EventDispatcher
   constructor: (@canvas, rows, cols, colorGenerator) ->
     @colorGenerator = colorGenerator if colorGenerator?
     @colors = @colorGenerator(2)
+    @newCellValue = -2
     @rows = rows if rows?
     @cols = cols if cols?
     @ants = []
@@ -37,6 +38,16 @@ class root.Ants.Grid extends root.EventDispatcher
     @runSteps = 1
     window.addEventListener 'resize', @updateSize.bind(this), false
 
+  getCell: (x, y) ->
+    v = @data[x][y]
+    v += @colors.length while v < 0
+    return v
+
+  setCell: (x, y, v) ->
+    if @data[x][y] != v
+      @data[x][y] = v
+      @drawCell x, y
+
   setColorGenerator: (generator) ->
     @colorGenerator = generator
     @colors = @colorGenerator @colors.length
@@ -44,6 +55,7 @@ class root.Ants.Grid extends root.EventDispatcher
 
   removeColor: (index) ->
     @colors = @colorGenerator @colors.length-1
+    @newCellValue -= 1
     for ant in @ants
       ant.turns.splice index, 1
       ant.dispatch 'turnsChanged'
@@ -52,6 +64,7 @@ class root.Ants.Grid extends root.EventDispatcher
   addColor: (index) ->
     ncolors = @colors.length+1
     @colors = @colorGenerator ncolors
+    @newCellValue += 1
     for ant in @ants
       while ant.turns.length < ncolors
         ant.turns.push root.Ants.Ant.TurnLeft
@@ -60,6 +73,7 @@ class root.Ants.Grid extends root.EventDispatcher
 
   setNumColors: (n) ->
     return if @colors.length == n
+    @newCellValue = -n
     @colors = @colorGenerator n
     for ant in @ants
       return if ant.turns.length == n
@@ -106,7 +120,7 @@ class root.Ants.Grid extends root.EventDispatcher
   reset: @frozenMethod ->
     @rows = @initial_state[0]
     @cols = @initial_state[1]
-    @data = (0 for j in [1..@cols] for i in [1..@rows])
+    @data = (@newCellValue for j in [1..@cols] for i in [1..@rows])
     @iteration = 0
     ant.reset() for ant in @ants
     @updateSize()
@@ -129,26 +143,26 @@ class root.Ants.Grid extends root.EventDispatcher
 
   resizeBy: (leftof, rightof, above, below) ->
     if leftof > 0
-      row.unshift(0) for j in [1..leftof] for row in @data
+      row.unshift(@newCellValue) for j in [1..leftof] for row in @data
 
     else if leftof < 0
       row.shift() for j in [1..leftof] for row in @data
     @cols += leftof
 
     if rightof > 0
-      row.push(0) for j in [1..rightof] for row in @data
+      row.push(@newCellValue) for j in [1..rightof] for row in @data
     else if rightof < 0
       row.pop() for j in [1..rightof] for row in @data
     @cols += rightof
 
     if above > 0
-      @data.unshift (0 for j in [1..@cols]) for i in [1..above]
+      @data.unshift (@newCellValue for j in [1..@cols]) for i in [1..above]
     else if above < 0
       @data.shift() for i in [above..-1]
     @rows += above
 
     if below > 0
-      @data.push (0 for j in [1..@cols]) for i in [1..below]
+      @data.push (@newCellValue for j in [1..@cols]) for i in [1..below]
     else if below < 0
       @data.pop() for i in [below..-1]
     @rows += below
@@ -187,20 +201,16 @@ class root.Ants.Grid extends root.EventDispatcher
   drawCell: (row, col) ->
     return if @frozen
     ctx = @canvas.getContext '2d'
-    ctx.fillStyle = @colors[@data[row][col]]
+    ctx.fillStyle = @colors[@getCell row, col]
     ctx.fillRect col, row, 1, 1
 
   render: ->
     ctx = @canvas.getContext '2d'
 
-    # Flood fill color 0
-    ctx.fillStyle = @colors[0]
-    ctx.fillRect 0, 0, @cols, @rows
-
     # TODO d es it pay to aggregate draws by fill color?
     for row, i in @data
       for cell, j in row
-        @drawCell(i, j) if cell != 0
+        @drawCell(i, j) if cell >= 0
 
     ant.draw() for ant in @ants
 
