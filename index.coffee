@@ -63,6 +63,11 @@ do ->
     iteration.readOnly = false
     runctl.innerText = 'Play'
 
+  window.addEventListener 'keypress', (e) ->
+    # space while paused to step
+    if not grid.running and e.charCode == 32
+      grid.runStep()
+
   window.addEventListener "error", grid.stop.bind(grid), false
 
   runctl.addEventListener 'click', (->
