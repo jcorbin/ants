@@ -26,9 +26,9 @@ class root.Ants.GridData
     @_data[@index pos] = val
 
   each: (f) ->
-    for pos0 in [0...@shape[0]]
-      for pos1 in [0...@shape[1]]
-        pos = [pos0, pos1]
+    for row in [0...@view[2]]
+      for col in [0...@view[3]]
+        pos = [row, col]
         f pos, @_data[@index pos]
 
   resizeBy: (delta) ->
