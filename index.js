@@ -18,7 +18,7 @@
     };
     window.addEventListener("resize", updateGeometry, false);
     updateGeometry();
-    grid = new Ants.Grid(grid, 10, 10, Ants.Grid.HueWheelGenerator(0.5, 0.3));
+    grid = new Ants.Grid(grid, 8, 8, Ants.Grid.HueWheelGenerator(0.5, 0.3));
     grid.addAnt(new Ants.Ant(Math.floor(grid.rows / 2), Math.floor(grid.cols / 2), 0, "#fff", "RL"));
     reset.addEventListener('click', grid.reset.bind(grid), false);
     slower.addEventListener('click', (function() {
@@ -53,6 +53,11 @@
     grid.addListener("stop", function() {
       iteration.readOnly = false;
       return runctl.innerText = 'Play';
+    });
+    window.addEventListener('keypress', function(e) {
+      if (!grid.running && e.charCode === 32) {
+        return grid.runStep();
+      }
     });
     window.addEventListener("error", grid.stop.bind(grid), false);
     runctl.addEventListener('click', (function() {

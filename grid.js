@@ -8,6 +8,145 @@
     _base.Ants = {};
   }
 
+  root.Ants.GridData = (function() {
+
+    function GridData(shape, initValue) {
+      this.initValue = initValue;
+      if (shape.length !== 2) {
+        throw Error("unsupported Grid dimensonality " + shape.length);
+      }
+      this.shape = shape;
+      this.reset();
+    }
+
+    GridData.prototype.reset = function() {
+      var i, j;
+      return this._data = (function() {
+        var _i, _ref1, _results;
+        _results = [];
+        for (i = _i = 1, _ref1 = this.shape[0]; 1 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 1 <= _ref1 ? ++_i : --_i) {
+          _results.push((function() {
+            var _j, _ref2, _results1;
+            _results1 = [];
+            for (j = _j = 1, _ref2 = this.shape[1]; 1 <= _ref2 ? _j <= _ref2 : _j >= _ref2; j = 1 <= _ref2 ? ++_j : --_j) {
+              _results1.push(this.initValue);
+            }
+            return _results1;
+          }).call(this));
+        }
+        return _results;
+      }).call(this);
+    };
+
+    GridData.prototype.get = function(pos) {
+      return this._data[pos[0]][pos[1]];
+    };
+
+    GridData.prototype.set = function(pos, val) {
+      return this._data[pos[0]][pos[1]] = val;
+    };
+
+    GridData.prototype.each = function(f) {
+      var i, j, row, val, _i, _len, _ref1, _results;
+      _ref1 = this._data;
+      _results = [];
+      for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
+        row = _ref1[i];
+        _results.push((function() {
+          var _j, _len1, _results1;
+          _results1 = [];
+          for (j = _j = 0, _len1 = row.length; _j < _len1; j = ++_j) {
+            val = row[j];
+            _results1.push(f([i, j], val));
+          }
+          return _results1;
+        })());
+      }
+      return _results;
+    };
+
+    GridData.prototype.resizeBy = function(delta) {
+      var above, below, i, j, leftof, rightof, row, _i, _j, _k, _l, _len, _len1, _len2, _len3, _m, _n, _o, _p, _q, _r, _ref1, _ref2, _ref3, _ref4, _s, _t;
+      if (delta.length !== this.shape.length * 2) {
+        throw Error("Need " + (this.shape.length * 2) + " deltas, got " + delta.length);
+      }
+      above = delta[0], below = delta[1], leftof = delta[2], rightof = delta[3];
+      if (above > 0) {
+        for (i = _i = 1; 1 <= above ? _i <= above : _i >= above; i = 1 <= above ? ++_i : --_i) {
+          this._data.unshift((function() {
+            var _j, _ref1, _results;
+            _results = [];
+            for (j = _j = 1, _ref1 = this.shape[1]; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; j = 1 <= _ref1 ? ++_j : --_j) {
+              _results.push(this.initValue);
+            }
+            return _results;
+          }).call(this));
+        }
+      } else if (above < 0) {
+        for (i = _j = above; above <= -1 ? _j <= -1 : _j >= -1; i = above <= -1 ? ++_j : --_j) {
+          this._data.shift();
+        }
+      }
+      this.shape[0] += above;
+      if (below > 0) {
+        for (i = _k = 1; 1 <= below ? _k <= below : _k >= below; i = 1 <= below ? ++_k : --_k) {
+          this._data.push((function() {
+            var _l, _ref1, _results;
+            _results = [];
+            for (j = _l = 1, _ref1 = this.shape[1]; 1 <= _ref1 ? _l <= _ref1 : _l >= _ref1; j = 1 <= _ref1 ? ++_l : --_l) {
+              _results.push(this.initValue);
+            }
+            return _results;
+          }).call(this));
+        }
+      } else if (below < 0) {
+        for (i = _l = below; below <= -1 ? _l <= -1 : _l >= -1; i = below <= -1 ? ++_l : --_l) {
+          this._data.pop();
+        }
+      }
+      this.shape[0] += below;
+      if (leftof > 0) {
+        _ref1 = this._data;
+        for (_m = 0, _len = _ref1.length; _m < _len; _m++) {
+          row = _ref1[_m];
+          for (j = _n = 1; 1 <= leftof ? _n <= leftof : _n >= leftof; j = 1 <= leftof ? ++_n : --_n) {
+            row.unshift(this.initValue);
+          }
+        }
+      } else if (leftof < 0) {
+        _ref2 = this._data;
+        for (_o = 0, _len1 = _ref2.length; _o < _len1; _o++) {
+          row = _ref2[_o];
+          for (j = _p = 1; 1 <= leftof ? _p <= leftof : _p >= leftof; j = 1 <= leftof ? ++_p : --_p) {
+            row.shift();
+          }
+        }
+      }
+      this.shape[1] += leftof;
+      if (rightof > 0) {
+        _ref3 = this._data;
+        for (_q = 0, _len2 = _ref3.length; _q < _len2; _q++) {
+          row = _ref3[_q];
+          for (j = _r = 1; 1 <= rightof ? _r <= rightof : _r >= rightof; j = 1 <= rightof ? ++_r : --_r) {
+            row.push(this.initValue);
+          }
+        }
+      } else if (rightof < 0) {
+        _ref4 = this._data;
+        for (_s = 0, _len3 = _ref4.length; _s < _len3; _s++) {
+          row = _ref4[_s];
+          for (j = _t = 1; 1 <= rightof ? _t <= rightof : _t >= rightof; j = 1 <= rightof ? ++_t : --_t) {
+            row.pop();
+          }
+        }
+      }
+      return this.shape[1] += rightof;
+    };
+
+    return GridData;
+
+  })();
+
   root.Ants.Grid = (function(_super) {
     var colorGenerator, cols, rows;
 
@@ -74,7 +213,7 @@
 
     Grid.prototype.getCell = function(x, y) {
       var v;
-      v = this.data[x][y];
+      v = this.data.get([x, y]);
       while (v < 0) {
         v += this.colors.length;
       }
@@ -82,8 +221,10 @@
     };
 
     Grid.prototype.setCell = function(x, y, v) {
-      if (this.data[x][y] !== v) {
-        this.data[x][y] = v;
+      var pos;
+      pos = [x, y];
+      if (this.data.get(pos) !== v) {
+        this.data.set(pos, v);
         return this.drawCell(x, y);
       }
     };
@@ -97,7 +238,7 @@
     Grid.prototype.removeColor = function(index) {
       var ant, _i, _len, _ref1;
       this.colors = this.colorGenerator(this.colors.length - 1);
-      this.newCellValue -= 1;
+      this.newCellValue += 1;
       _ref1 = this.ants;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         ant = _ref1[_i];
@@ -111,7 +252,7 @@
       var ant, ncolors, _i, _len, _ref1;
       ncolors = this.colors.length + 1;
       this.colors = this.colorGenerator(ncolors);
-      this.newCellValue += 1;
+      this.newCellValue -= 1;
       _ref1 = this.ants;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         ant = _ref1[_i];
@@ -133,17 +274,16 @@
       _ref1 = this.ants;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         ant = _ref1[_i];
-        if (ant.turns.length === n) {
-          return;
-        }
-        if (ant.turns.length > n) {
-          ant.turns.splice(n - 1);
-        } else {
-          while (ant.turns.length < n) {
-            ant.turns.push(root.Ants.Ant.TurnLeft);
+        if (ant.turns.length !== n) {
+          if (ant.turns.length > n) {
+            ant.turns.splice(n - 1);
+          } else {
+            while (ant.turns.length < n) {
+              ant.turns.push(root.Ants.Ant.TurnLeft);
+            }
           }
+          ant.dispatch('turnsChanged');
         }
-        ant.dispatch('turnsChanged');
       }
       return this.reset();
     };
@@ -194,24 +334,10 @@
     };
 
     Grid.prototype.reset = Grid.frozenMethod(function() {
-      var ant, i, j, _i, _len, _ref1;
+      var ant, _i, _len, _ref1;
       this.rows = this.initial_state[0];
       this.cols = this.initial_state[1];
-      this.data = (function() {
-        var _i, _ref1, _results;
-        _results = [];
-        for (i = _i = 1, _ref1 = this.rows; 1 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 1 <= _ref1 ? ++_i : --_i) {
-          _results.push((function() {
-            var _j, _ref2, _results1;
-            _results1 = [];
-            for (j = _j = 1, _ref2 = this.cols; 1 <= _ref2 ? _j <= _ref2 : _j >= _ref2; j = 1 <= _ref2 ? ++_j : --_j) {
-              _results1.push(this.newCellValue);
-            }
-            return _results1;
-          }).call(this));
-        }
-        return _results;
-      }).call(this);
+      this.data = new root.Ants.GridData([this.rows, this.cols], this.newCellValue);
       this.iteration = 0;
       _ref1 = this.ants;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
@@ -234,80 +360,13 @@
     };
 
     Grid.prototype.resizeBy = function(leftof, rightof, above, below) {
-      var ant, i, j, row, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _n, _o, _p, _q, _r, _ref1, _ref2, _ref3, _ref4, _ref5, _s, _t, _u;
-      if (leftof > 0) {
-        _ref1 = this.data;
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          row = _ref1[_i];
-          for (j = _j = 1; 1 <= leftof ? _j <= leftof : _j >= leftof; j = 1 <= leftof ? ++_j : --_j) {
-            row.unshift(this.newCellValue);
-          }
-        }
-      } else if (leftof < 0) {
-        _ref2 = this.data;
-        for (_k = 0, _len1 = _ref2.length; _k < _len1; _k++) {
-          row = _ref2[_k];
-          for (j = _l = 1; 1 <= leftof ? _l <= leftof : _l >= leftof; j = 1 <= leftof ? ++_l : --_l) {
-            row.shift();
-          }
-        }
-      }
-      this.cols += leftof;
-      if (rightof > 0) {
-        _ref3 = this.data;
-        for (_m = 0, _len2 = _ref3.length; _m < _len2; _m++) {
-          row = _ref3[_m];
-          for (j = _n = 1; 1 <= rightof ? _n <= rightof : _n >= rightof; j = 1 <= rightof ? ++_n : --_n) {
-            row.push(this.newCellValue);
-          }
-        }
-      } else if (rightof < 0) {
-        _ref4 = this.data;
-        for (_o = 0, _len3 = _ref4.length; _o < _len3; _o++) {
-          row = _ref4[_o];
-          for (j = _p = 1; 1 <= rightof ? _p <= rightof : _p >= rightof; j = 1 <= rightof ? ++_p : --_p) {
-            row.pop();
-          }
-        }
-      }
-      this.cols += rightof;
-      if (above > 0) {
-        for (i = _q = 1; 1 <= above ? _q <= above : _q >= above; i = 1 <= above ? ++_q : --_q) {
-          this.data.unshift((function() {
-            var _r, _ref5, _results;
-            _results = [];
-            for (j = _r = 1, _ref5 = this.cols; 1 <= _ref5 ? _r <= _ref5 : _r >= _ref5; j = 1 <= _ref5 ? ++_r : --_r) {
-              _results.push(this.newCellValue);
-            }
-            return _results;
-          }).call(this));
-        }
-      } else if (above < 0) {
-        for (i = _r = above; above <= -1 ? _r <= -1 : _r >= -1; i = above <= -1 ? ++_r : --_r) {
-          this.data.shift();
-        }
-      }
-      this.rows += above;
-      if (below > 0) {
-        for (i = _s = 1; 1 <= below ? _s <= below : _s >= below; i = 1 <= below ? ++_s : --_s) {
-          this.data.push((function() {
-            var _ref5, _results, _t;
-            _results = [];
-            for (j = _t = 1, _ref5 = this.cols; 1 <= _ref5 ? _t <= _ref5 : _t >= _ref5; j = 1 <= _ref5 ? ++_t : --_t) {
-              _results.push(this.newCellValue);
-            }
-            return _results;
-          }).call(this));
-        }
-      } else if (below < 0) {
-        for (i = _t = below; below <= -1 ? _t <= -1 : _t >= -1; i = below <= -1 ? ++_t : --_t) {
-          this.data.pop();
-        }
-      }
-      this.rows += below;
-      _ref5 = this.ants;
-      for (_u = 0, _len4 = _ref5.length; _u < _len4; _u++) {
-        ant = _ref5[_u];
+      var ant, _i, _len, _ref1;
+      this.data.resizeBy([above, below, leftof, rightof]);
+      this.rows += above + below;
+      this.cols += leftof + rightof;
+      _ref1 = this.ants;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        ant = _ref1[_i];
         ant.row += above;
         ant.col += leftof;
         ant.getInBounds();
@@ -333,51 +392,48 @@
     };
 
     Grid.prototype.randomize = function() {
-      var i, j;
-      return this.data = (function() {
-        var _i, _ref1, _results;
-        _results = [];
-        for (i = _i = 0, _ref1 = this.rows; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 0 <= _ref1 ? ++_i : --_i) {
-          _results.push((function() {
-            var _j, _ref2, _results1;
-            _results1 = [];
-            for (j = _j = 0, _ref2 = this.cols; 0 <= _ref2 ? _j <= _ref2 : _j >= _ref2; j = 0 <= _ref2 ? ++_j : --_j) {
-              _results1.push(Math.random() * this.colors.length);
-            }
-            return _results1;
-          }).call(this));
-        }
-        return _results;
-      }).call(this);
+      var i, j, _i, _ref1, _results;
+      _results = [];
+      for (i = _i = 0, _ref1 = this.rows; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 0 <= _ref1 ? ++_i : --_i) {
+        _results.push((function() {
+          var _j, _ref2, _results1;
+          _results1 = [];
+          for (j = _j = 0, _ref2 = this.cols; 0 <= _ref2 ? _j <= _ref2 : _j >= _ref2; j = 0 <= _ref2 ? ++_j : --_j) {
+            _results1.push(this.data.set([i, j], Math.random() * this.colors.length));
+          }
+          return _results1;
+        }).call(this));
+      }
+      return _results;
     };
 
     Grid.prototype.drawCell = function(row, col) {
-      var ctx;
+      var color, ctx;
       if (this.frozen) {
         return;
       }
+      color = this.getCell(row, col);
+      color = this.data.get([row, col]);
+      if (color < 0) {
+        return;
+      }
+      color = this.colors[color];
       ctx = this.canvas.getContext('2d');
-      ctx.fillStyle = this.colors[this.getCell(row, col)];
+      ctx.fillStyle = color;
       return ctx.fillRect(col, row, 1, 1);
     };
 
     Grid.prototype.render = function() {
-      var ant, cell, ctx, i, j, row, _i, _j, _k, _len, _len1, _len2, _ref1, _ref2, _results;
+      var ant, ctx, _i, _len, _ref1, _results,
+        _this = this;
       ctx = this.canvas.getContext('2d');
-      _ref1 = this.data;
-      for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
-        row = _ref1[i];
-        for (j = _j = 0, _len1 = row.length; _j < _len1; j = ++_j) {
-          cell = row[j];
-          if (cell >= 0) {
-            this.drawCell(i, j);
-          }
-        }
-      }
-      _ref2 = this.ants;
+      this.data.each(function(pos, val) {
+        return _this.drawCell.apply(_this, pos);
+      });
+      _ref1 = this.ants;
       _results = [];
-      for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-        ant = _ref2[_k];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        ant = _ref1[_i];
         _results.push(ant.draw());
       }
       return _results;

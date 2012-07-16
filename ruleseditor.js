@@ -19,7 +19,7 @@
       this.ant = ant;
       this.input = input;
       this.input.addEventListener('keypress', function() {
-        return _this.size = Math.max(1, _this.value.length);
+        return this.size = Math.max(1, this.value.length);
       }, false);
       this.input.addEventListener('change', function() {
         try {

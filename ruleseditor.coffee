@@ -2,7 +2,7 @@
 
 class root.Ants.RulesEditor extends root.Expander
   constructor: (@grid, @ant, @input) ->
-    @input.addEventListener 'keypress', =>
+    @input.addEventListener 'keypress', ->
       @size = Math.max(1, @value.length)
     , false
     @input.addEventListener 'change', =>

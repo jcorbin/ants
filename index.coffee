@@ -17,8 +17,8 @@ do ->
 
   grid = new Ants.Grid(
     grid, # canvas
-    10, # rows
-    10, # cols
+    8, # rows
+    8, # cols
     Ants.Grid.HueWheelGenerator(0.5, 0.3))
 
   grid.addAnt new Ants.Ant(
@@ -62,6 +62,11 @@ do ->
   grid.addListener "stop", ->
     iteration.readOnly = false
     runctl.innerText = 'Play'
+
+  window.addEventListener 'keypress', (e) ->
+    # space while paused to step
+    if not grid.running and e.charCode == 32
+      grid.runStep()
 
   window.addEventListener "error", grid.stop.bind(grid), false
 
