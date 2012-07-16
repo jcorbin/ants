@@ -8,18 +8,25 @@ class root.Ants.GridData
     @reset()
 
   reset: ->
-    @_data = (@initValue for j in [1..@shape[1]] for i in [1..@shape[0]])
+    size = @shape[0] * @shape[1]
+    @_data = new Int8Array size
+    @_data[i] = @initValue for i in [0...size]
+
+  index: (pos) ->
+    # row-major layout
+    pos[0] * @shape[1] + pos[1]
 
   get: (pos) ->
-    @_data[pos[0]][pos[1]]
+    @_data[@index pos]
 
   set: (pos, val) ->
-    @_data[pos[0]][pos[1]] = val
+    @_data[@index pos] = val
 
   each: (f) ->
-    for row, i in @_data
-      for val, j in row
-        f [i, j], val
+    for pos0 in [0...@shape[0]]
+      for pos1 in [0...@shape[1]]
+        pos = [pos0, pos1]
+        f pos, @_data[@index pos]
 
   resizeBy: (delta) ->
     if delta.length != @shape.length*2
@@ -27,29 +34,30 @@ class root.Ants.GridData
 
     [above, below, leftof, rightof] = delta
 
-    if above > 0
-      @_data.unshift (@initValue for j in [1..@shape[1]]) for i in [1..above]
-    else if above < 0
-      @_data.shift() for i in [above..-1]
-    @shape[0] += above
+    console.log "above: %o below: %o leftof: %o rightof: %o", above, below, leftof, rightof
 
-    if below > 0
-      @_data.push (@initValue for j in [1..@shape[1]]) for i in [1..below]
-    else if below < 0
-      @_data.pop() for i in [below..-1]
-    @shape[0] += below
+    newshape = [@shape[0] + above + below, @shape[1] + rightof + leftof]
+    newdata = new Int8Array newshape[0] * newshape[1]
 
-    if leftof > 0
-      row.unshift(@initValue) for j in [1..leftof] for row in @_data
-    else if leftof < 0
-      row.shift() for j in [1..leftof] for row in @_data
-    @shape[1] += leftof
+    # NOTE: logic below is dependant on the row-major layout
 
-    if rightof > 0
-      row.push(@initValue) for j in [1..rightof] for row in @_data
-    else if rightof < 0
-      row.pop() for j in [1..rightof] for row in @_data
-    @shape[1] += rightof
+    offset = 0
+    for offset in [offset...offset+above * newshape[1]]
+      newdata[offset] = @initValue
+    for row in [0...@shape[0]]
+      for offset in [offset...offset+leftof]
+        newdata[offset] = @initValue
+      begin = row * @shape[1]
+      end = begin + @shape[1]
+      newdata.set @_data.subarray(begin, end), offset
+      offset += @shape[1]
+      for offset in [offset...offset+rightof]
+        newdata[offset] = @initValue
+    for offset in [offset...offset+below * newshape[1]]
+      newdata[offset] = @initValue
+
+    @_data = newdata
+    @shape = newshape
 
 class root.Ants.Grid extends root.EventDispatcher
   @frozenMethod: (f) -> ->
