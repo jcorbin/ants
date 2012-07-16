@@ -17,8 +17,8 @@ do ->
 
   grid = new Ants.Grid(
     grid, # canvas
-    10, # rows
-    10, # cols
+    8, # rows
+    8, # cols
     Ants.Grid.HueWheelGenerator(0.5, 0.3))
 
   grid.addAnt new Ants.Ant(
