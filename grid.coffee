@@ -15,7 +15,9 @@ class root.Ants.GridData
 
   index: (pos) ->
     # row-major layout
-    pos[0] * @shape[1] + pos[1]
+    row = pos[0] + @view[0]
+    col = pos[1] + @view[1]
+    row * @shape[1] + col
 
   get: (pos) ->
     @_data[@index pos]
