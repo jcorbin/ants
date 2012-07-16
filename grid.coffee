@@ -1,6 +1,8 @@
 (root = exports ? this).Ants ?= {}
 
 class root.Ants.GridData
+  @MaxGrowStep = 512
+
   constructor: (shape, @initValue) ->
     if shape.length != 2
       throw Error "unsupported Grid dimensonality #{shape.length}"
@@ -31,36 +33,57 @@ class root.Ants.GridData
         pos = [row, col]
         f pos, @_data[@index pos]
 
+  grow: (growStep) ->
+    growStep = Math.max(growStep, Math.min(
+      root.Ants.GridData.MaxGrowStep,
+      Math.max(@shape...)*2))
+
+    newshape = [@shape[0] + growStep*2, @shape[1] + growStep*2]
+    newdata = new Int8Array newshape[0] * newshape[1]
+
+    # NOTE: logic below is dependant on the row-major layout
+
+    for offset in [0...growStep * newshape[1]]
+      newdata[offset] = @initValue
+    for row in [0...@shape[0]]
+      for offset in [offset...offset+growStep]
+        newdata[offset] = @initValue
+      begin = row * @shape[1]
+      end = begin + @shape[1]
+      newdata.set @_data.subarray(begin, end), offset
+      offset += @shape[1]
+      for offset in [offset...offset+growStep]
+        newdata[offset] = @initValue
+    for offset in [offset...offset+growStep * newshape[1]]
+      newdata[offset] = @initValue
+
+    @_data = newdata
+    @shape = newshape
+    @view[0] += growStep
+    @view[1] += growStep
+
   resizeBy: (delta) ->
     if delta.length != @shape.length*2
       throw Error "Need #{@shape.length*2} deltas, got #{delta.length}"
 
     [above, below, leftof, rightof] = delta
 
-    console.log "above: %o below: %o leftof: %o rightof: %o", above, below, leftof, rightof
+    spare_above   = @view[0]
+    spare_below   = @shape[0] - @view[2] - @view[0]
+    spare_leftof  = @view[1]
+    spare_rightof = @shape[1] - @view[3] - @view[1]
 
-    newshape = [@shape[0] + above + below, @shape[1] + rightof + leftof]
-    newdata = new Int8Array newshape[0] * newshape[1]
+    growStep = Math.max(0,
+      above   - spare_above,
+      below   - spare_below,
+      leftof  - spare_leftof,
+      rightof - spare_rightof)
+    @grow growStep if growStep > 0
 
-    # NOTE: logic below is dependant on the row-major layout
-
-    offset = 0
-    for offset in [offset...offset+above * newshape[1]]
-      newdata[offset] = @initValue
-    for row in [0...@shape[0]]
-      for offset in [offset...offset+leftof]
-        newdata[offset] = @initValue
-      begin = row * @shape[1]
-      end = begin + @shape[1]
-      newdata.set @_data.subarray(begin, end), offset
-      offset += @shape[1]
-      for offset in [offset...offset+rightof]
-        newdata[offset] = @initValue
-    for offset in [offset...offset+below * newshape[1]]
-      newdata[offset] = @initValue
-
-    @_data = newdata
-    @shape = newshape
+    @view[0] -= above
+    @view[1] -= leftof
+    @view[2] += above + below
+    @view[3] += leftof + rightof
 
 class root.Ants.Grid extends root.EventDispatcher
   @frozenMethod: (f) -> ->
