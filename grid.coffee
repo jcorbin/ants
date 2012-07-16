@@ -5,6 +5,7 @@ class root.Ants.GridData
     if shape.length != 2
       throw Error "unsupported Grid dimensonality #{shape.length}"
     @shape = shape
+    @view = [0, 0, @shape[0], @shape[1]]
     @reset()
 
   reset: ->
