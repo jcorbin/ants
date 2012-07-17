@@ -63,11 +63,11 @@ class root.Ants.Ant extends root.EventDispatcher
         when 'l' then Left
         else throw Error 'Invalid turn direction'
     @dispatch 'turnsChanged'
-    if @grid
-      if @grid.length == d.length
+    if @grid?
+      if @grid.length == @turns.length
         @grid.reset()
       else
-        @grid.setNumColors d.length
+        @grid.setNumColors @turns.length
 
   _saveInitialState: ->
     @initial_state = [@row, @col, @heading]
