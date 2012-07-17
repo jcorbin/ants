@@ -10,137 +10,108 @@
 
   root.Ants.GridData = (function() {
 
+    GridData.MaxGrowStep = 512;
+
     function GridData(shape, initValue) {
       this.initValue = initValue;
       if (shape.length !== 2) {
         throw Error("unsupported Grid dimensonality " + shape.length);
       }
       this.shape = shape;
+      this.view = [0, 0, this.shape[0], this.shape[1]];
       this.reset();
     }
 
     GridData.prototype.reset = function() {
-      var i, j;
-      return this._data = (function() {
-        var _i, _ref1, _results;
-        _results = [];
-        for (i = _i = 1, _ref1 = this.shape[0]; 1 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 1 <= _ref1 ? ++_i : --_i) {
-          _results.push((function() {
-            var _j, _ref2, _results1;
-            _results1 = [];
-            for (j = _j = 1, _ref2 = this.shape[1]; 1 <= _ref2 ? _j <= _ref2 : _j >= _ref2; j = 1 <= _ref2 ? ++_j : --_j) {
-              _results1.push(this.initValue);
-            }
-            return _results1;
-          }).call(this));
-        }
-        return _results;
-      }).call(this);
-    };
-
-    GridData.prototype.get = function(pos) {
-      return this._data[pos[0]][pos[1]];
-    };
-
-    GridData.prototype.set = function(pos, val) {
-      return this._data[pos[0]][pos[1]] = val;
-    };
-
-    GridData.prototype.each = function(f) {
-      var i, j, row, val, _i, _len, _ref1, _results;
-      _ref1 = this._data;
+      var i, size, _i, _results;
+      size = this.shape[0] * this.shape[1];
+      this._data = new Int8Array(size);
       _results = [];
-      for (i = _i = 0, _len = _ref1.length; _i < _len; i = ++_i) {
-        row = _ref1[i];
-        _results.push((function() {
-          var _j, _len1, _results1;
-          _results1 = [];
-          for (j = _j = 0, _len1 = row.length; _j < _len1; j = ++_j) {
-            val = row[j];
-            _results1.push(f([i, j], val));
-          }
-          return _results1;
-        })());
+      for (i = _i = 0; 0 <= size ? _i < size : _i > size; i = 0 <= size ? ++_i : --_i) {
+        _results.push(this._data[i] = this.initValue);
       }
       return _results;
     };
 
+    GridData.prototype.index = function(pos) {
+      var col, row;
+      row = pos[0] + this.view[0];
+      col = pos[1] + this.view[1];
+      return row * this.shape[1] + col;
+    };
+
+    GridData.prototype.get = function(pos) {
+      return this._data[this.index(pos)];
+    };
+
+    GridData.prototype.set = function(pos, val) {
+      return this._data[this.index(pos)] = val;
+    };
+
+    GridData.prototype.each = function(f) {
+      var col, pos, row, _i, _ref1, _results;
+      _results = [];
+      for (row = _i = 0, _ref1 = this.view[2]; 0 <= _ref1 ? _i < _ref1 : _i > _ref1; row = 0 <= _ref1 ? ++_i : --_i) {
+        _results.push((function() {
+          var _j, _ref2, _results1;
+          _results1 = [];
+          for (col = _j = 0, _ref2 = this.view[3]; 0 <= _ref2 ? _j < _ref2 : _j > _ref2; col = 0 <= _ref2 ? ++_j : --_j) {
+            pos = [row, col];
+            _results1.push(f(pos, this._data[this.index(pos)]));
+          }
+          return _results1;
+        }).call(this));
+      }
+      return _results;
+    };
+
+    GridData.prototype.grow = function(growStep) {
+      var begin, end, newdata, newshape, offset, row, _i, _j, _k, _l, _m, _ref1, _ref2, _ref3, _ref4, _ref5;
+      growStep = Math.max(growStep, Math.min(root.Ants.GridData.MaxGrowStep, Math.max.apply(Math, this.shape) * 2));
+      newshape = [this.shape[0] + growStep * 2, this.shape[1] + growStep * 2];
+      newdata = new Int8Array(newshape[0] * newshape[1]);
+      for (offset = _i = 0, _ref1 = growStep * newshape[1]; 0 <= _ref1 ? _i < _ref1 : _i > _ref1; offset = 0 <= _ref1 ? ++_i : --_i) {
+        newdata[offset] = this.initValue;
+      }
+      for (row = _j = 0, _ref2 = this.shape[0]; 0 <= _ref2 ? _j < _ref2 : _j > _ref2; row = 0 <= _ref2 ? ++_j : --_j) {
+        for (offset = _k = offset, _ref3 = offset + growStep; offset <= _ref3 ? _k < _ref3 : _k > _ref3; offset = offset <= _ref3 ? ++_k : --_k) {
+          newdata[offset] = this.initValue;
+        }
+        begin = row * this.shape[1];
+        end = begin + this.shape[1];
+        newdata.set(this._data.subarray(begin, end), offset);
+        offset += this.shape[1];
+        for (offset = _l = offset, _ref4 = offset + growStep; offset <= _ref4 ? _l < _ref4 : _l > _ref4; offset = offset <= _ref4 ? ++_l : --_l) {
+          newdata[offset] = this.initValue;
+        }
+      }
+      for (offset = _m = offset, _ref5 = offset + growStep * newshape[1]; offset <= _ref5 ? _m < _ref5 : _m > _ref5; offset = offset <= _ref5 ? ++_m : --_m) {
+        newdata[offset] = this.initValue;
+      }
+      this._data = newdata;
+      this.shape = newshape;
+      this.view[0] += growStep;
+      return this.view[1] += growStep;
+    };
+
     GridData.prototype.resizeBy = function(delta) {
-      var above, below, i, j, leftof, rightof, row, _i, _j, _k, _l, _len, _len1, _len2, _len3, _m, _n, _o, _p, _q, _r, _ref1, _ref2, _ref3, _ref4, _s, _t;
+      var above, below, growStep, leftof, rightof, spare_above, spare_below, spare_leftof, spare_rightof;
       if (delta.length !== this.shape.length * 2) {
         throw Error("Need " + (this.shape.length * 2) + " deltas, got " + delta.length);
       }
       above = delta[0], below = delta[1], leftof = delta[2], rightof = delta[3];
-      if (above > 0) {
-        for (i = _i = 1; 1 <= above ? _i <= above : _i >= above; i = 1 <= above ? ++_i : --_i) {
-          this._data.unshift((function() {
-            var _j, _ref1, _results;
-            _results = [];
-            for (j = _j = 1, _ref1 = this.shape[1]; 1 <= _ref1 ? _j <= _ref1 : _j >= _ref1; j = 1 <= _ref1 ? ++_j : --_j) {
-              _results.push(this.initValue);
-            }
-            return _results;
-          }).call(this));
-        }
-      } else if (above < 0) {
-        for (i = _j = above; above <= -1 ? _j <= -1 : _j >= -1; i = above <= -1 ? ++_j : --_j) {
-          this._data.shift();
-        }
+      spare_above = this.view[0];
+      spare_below = this.shape[0] - this.view[2] - this.view[0];
+      spare_leftof = this.view[1];
+      spare_rightof = this.shape[1] - this.view[3] - this.view[1];
+      growStep = Math.max(0, above - spare_above, below - spare_below, leftof - spare_leftof, rightof - spare_rightof);
+      if (growStep > 0) {
+        this.grow(growStep);
       }
-      this.shape[0] += above;
-      if (below > 0) {
-        for (i = _k = 1; 1 <= below ? _k <= below : _k >= below; i = 1 <= below ? ++_k : --_k) {
-          this._data.push((function() {
-            var _l, _ref1, _results;
-            _results = [];
-            for (j = _l = 1, _ref1 = this.shape[1]; 1 <= _ref1 ? _l <= _ref1 : _l >= _ref1; j = 1 <= _ref1 ? ++_l : --_l) {
-              _results.push(this.initValue);
-            }
-            return _results;
-          }).call(this));
-        }
-      } else if (below < 0) {
-        for (i = _l = below; below <= -1 ? _l <= -1 : _l >= -1; i = below <= -1 ? ++_l : --_l) {
-          this._data.pop();
-        }
-      }
-      this.shape[0] += below;
-      if (leftof > 0) {
-        _ref1 = this._data;
-        for (_m = 0, _len = _ref1.length; _m < _len; _m++) {
-          row = _ref1[_m];
-          for (j = _n = 1; 1 <= leftof ? _n <= leftof : _n >= leftof; j = 1 <= leftof ? ++_n : --_n) {
-            row.unshift(this.initValue);
-          }
-        }
-      } else if (leftof < 0) {
-        _ref2 = this._data;
-        for (_o = 0, _len1 = _ref2.length; _o < _len1; _o++) {
-          row = _ref2[_o];
-          for (j = _p = 1; 1 <= leftof ? _p <= leftof : _p >= leftof; j = 1 <= leftof ? ++_p : --_p) {
-            row.shift();
-          }
-        }
-      }
-      this.shape[1] += leftof;
-      if (rightof > 0) {
-        _ref3 = this._data;
-        for (_q = 0, _len2 = _ref3.length; _q < _len2; _q++) {
-          row = _ref3[_q];
-          for (j = _r = 1; 1 <= rightof ? _r <= rightof : _r >= rightof; j = 1 <= rightof ? ++_r : --_r) {
-            row.push(this.initValue);
-          }
-        }
-      } else if (rightof < 0) {
-        _ref4 = this._data;
-        for (_s = 0, _len3 = _ref4.length; _s < _len3; _s++) {
-          row = _ref4[_s];
-          for (j = _t = 1; 1 <= rightof ? _t <= rightof : _t >= rightof; j = 1 <= rightof ? ++_t : --_t) {
-            row.pop();
-          }
-        }
-      }
-      return this.shape[1] += rightof;
+      this.view[0] -= above;
+      this.view[1] -= leftof;
+      this.view[2] += above + below;
+      return this.view[3] += leftof + rightof;
     };
 
     return GridData;

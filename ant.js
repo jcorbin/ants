@@ -131,11 +131,11 @@
         return _results;
       })();
       this.dispatch('turnsChanged');
-      if (this.grid) {
-        if (this.grid.length === d.length) {
+      if (this.grid != null) {
+        if (this.grid.length === this.turns.length) {
           return this.grid.reset();
         } else {
-          return this.grid.setNumColors(d.length);
+          return this.grid.setNumColors(this.turns.length);
         }
       }
     };
